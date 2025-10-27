@@ -18,7 +18,6 @@ export default function ForgotPassword() {
   const navigate = useNavigate();
 
   const handleReset = () => {
-
     if (!email) {
       setError("Please enter your email.");
       setMessage("");

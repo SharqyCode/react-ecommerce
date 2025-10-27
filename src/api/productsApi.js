@@ -21,8 +21,14 @@ export const addProduct = async (product) => {
     return pew
 }
 
-export const updateProduct = async (product, productId) => {
-    const pew = (await (axios.put(`${BASE_URL}/${productId}`, product)))
+export const updateProduct = async (productId, product) => {
+    const pew = (await (axios.put(`${BASE_URL}/${productId}`, product))).data
+    console.log("update:", pew);
+    return pew
+}
+
+export const deleteProductById = async (productId) => {
+    const pew = (await (axios.delete(`${BASE_URL}/${productId}`))).data
     console.log(pew);
     return pew
 }

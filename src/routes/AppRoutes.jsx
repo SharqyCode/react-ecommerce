@@ -7,7 +7,10 @@ import AdminDashboard from "../admin/pages/AdminDashboard";
 import AdminUsers from "../admin/pages/AdminUsers";
 import AdminProducts from "../admin/pages/AdminProducts";
 import AdminOrders from "../admin/pages/AdminOrders";
-// import AdminRoutes from "../admin/routes/adminRoutes"; // 👈 Import admin route group
+import RegisterPage from "../auth/components/RegisterPage";
+import LoginPage from "../auth/components/LoginPage";
+import ForgotPassword from "../auth/components/ForgotPassword";
+import Landing from "../Home/components/landing";
 
 export default function AppRoutes() {
   return (
@@ -18,6 +21,11 @@ export default function AppRoutes() {
         {/* <Route path="/shop" element={<Shop />} /> */}
 
         {/* Admin routes nested under /admin */}
+
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/admin" element={<AdminDashboard />}>
           {/* <Route index element={<AdminDashboard />} /> */}
           <Route path="users" element={<AdminUsers />} />
