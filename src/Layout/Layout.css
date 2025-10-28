@@ -1,5 +1,4 @@
-/* Updated #root to support flex layout for sticky footer */
-#root {
+Updated #root to support flex layout for sticky footer #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -11,7 +10,8 @@ main {
   /* Prevents content from hiding behind the TWO fixed headers */
   /* 70px (header) + 50px (categories) = 120px */
   padding-top: 120px;
-  flex-grow: 1; /* This makes main take up available space, pushing footer down */
+  flex-grow: 1;
+  /* This makes main take up available space, pushing footer down */
 }
 
 .app-header {
@@ -23,7 +23,8 @@ main {
   top: 0;
   left: 0;
   z-index: 1000;
-  box-sizing: border-box; /* Ensures padding doesn't affect width */
+  box-sizing: border-box;
+  /* Ensures padding doesn't affect width */
 }
 
 .navbar {
@@ -40,18 +41,24 @@ main {
   font-weight: bold;
   color: #ff0000;
   text-decoration: none;
-  flex-shrink: 0; /* Prevents logo from shrinking */
+  flex-shrink: 0;
+  /* Prevents logo from shrinking */
 }
 
 /* --- Updated Search Bar Styles --- */
 .search-bar {
   display: flex;
-  flex-grow: 1; /* Allows search bar to take available space */
-  max-width: 600px; /* Made it wider */
+  flex-grow: 1;
+  /* Allows search bar to take available space */
+  max-width: 600px;
+  /* Made it wider */
   margin: 0 30px;
-  background: #2a2a2a; /* Slightly lighter background */
-  border-radius: 25px; /* Modern pill shape */
-  border: 1px solid #444; /* Subtle border */
+  background: #2a2a2a;
+  /* Slightly lighter background */
+  border-radius: 25px;
+  /* Modern pill shape */
+  border: 1px solid #444;
+  /* Subtle border */
   overflow: hidden;
   transition: box-shadow 0.3s, border-color 0.3s;
 }
@@ -66,9 +73,11 @@ main {
   flex-grow: 1;
   border: none;
   background: transparent;
-  padding: 12px 20px; /* More padding */
+  padding: 12px 20px;
+  /* More padding */
   color: #fff;
-  font-size: 1rem; /* Larger font */
+  font-size: 1rem;
+  /* Larger font */
 }
 
 .search-bar input:focus {
@@ -79,18 +88,21 @@ main {
   background: #ff0000;
   border: none;
   color: white;
-  padding: 0 20px; /* More padding */
+  padding: 0 20px;
+  /* More padding */
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0 25px 25px 0; /* Match pill shape */
+  border-radius: 0 25px 25px 0;
+  /* Match pill shape */
   transition: background 0.3s;
 }
 
 .search-bar .search-btn:hover {
   background: #ff4c4c;
 }
+
 /* --- End of Updated Styles --- */
 
 /* Nav Links Styles */
@@ -100,7 +112,8 @@ main {
   margin: 0;
   padding: 0;
   gap: 30px;
-  flex-shrink: 0; /* Prevents links from shrinking */
+  flex-shrink: 0;
+  /* Prevents links from shrinking */
 }
 
 .nav-links li a {
@@ -119,7 +132,8 @@ main {
 .profile-link {
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between icon and text */
+  gap: 8px;
+  /* Space between icon and text */
 }
 
 /* --- UPDATED rule to adjust icon alignment --- */
@@ -127,8 +141,10 @@ main {
 .profile-link svg {
   /* This nudges the icon down 2px to align better with the text's midline */
   position: relative;
-  top: 2px; /* Increased from 1px to 2px */
+  top: 2px;
+  /* Increased from 1px to 2px */
 }
+
 /* --- End of new rule --- */
 
 /* Responsive */
@@ -136,24 +152,31 @@ main {
   .app-header {
     padding: 0 20px;
   }
+
   .navbar {
-    flex-wrap: wrap; /* Allow items to wrap */
+    flex-wrap: wrap;
+    /* Allow items to wrap */
     height: auto;
     padding: 10px 0;
   }
+
   .nav-logo {
     width: 100%;
     text-align: center;
     margin-bottom: 10px;
   }
+
   .search-bar {
-    order: 3; /* Move search bar to bottom */
+    order: 3;
+    /* Move search bar to bottom */
     width: 100%;
     margin: 10px 0 0 0;
     max-width: none;
   }
+
   .nav-links {
-    order: 2; /* Move nav links to middle */
+    order: 2;
+    /* Move nav links to middle */
     width: 100%;
     justify-content: center;
     gap: 20px;
@@ -161,7 +184,8 @@ main {
 
   /* Adjust main padding for new mobile header height */
   main {
-    padding-top: 185px; /* Manually adjusted for new header + categories */
+    padding-top: 185px;
+    /* Manually adjusted for new header + categories */
   }
 }
 
@@ -171,4 +195,3 @@ main {
     gap: 15px;
   }
 }
-
