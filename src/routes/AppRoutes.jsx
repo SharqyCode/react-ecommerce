@@ -11,6 +11,9 @@ import RegisterPage from "../auth/components/RegisterPage";
 import LoginPage from "../auth/components/LoginPage";
 import ForgotPassword from "../auth/components/ForgotPassword";
 import Landing from "../Home/components/landing";
+import Layout from "../Layout/Layout";
+import LandingPage from "../Layout/components/LandingPage";
+import Products from "../Layout/components/Products";
 
 export default function AppRoutes() {
   return (
@@ -22,12 +25,14 @@ export default function AppRoutes() {
 
         {/* Admin routes nested under /admin */}
 
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<LandingPage />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot" element={<ForgotPassword />} />
+        </Route>
         <Route path="/admin" element={<AdminDashboard />}>
-          {/* <Route index element={<AdminDashboard />} /> */}
           <Route path="users" element={<AdminUsers />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
