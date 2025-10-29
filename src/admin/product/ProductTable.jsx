@@ -6,30 +6,54 @@ import {
   getAllProducts,
   updateProduct,
 } from "../../api/productsApi";
-import { Box, Modal, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Modal,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
+import { empty_form } from "./values";
+import { getAllCategories } from "../../api/categoriesApi";
+import DynamicTextFields from "../components/DynamicTextFields";
 
 export default function ProductTable() {
   const queryClient = useQueryClient();
+
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
+    staleTime: Infinity,
   });
 
-  const [formData, setFormData] = useState({
-    _id: "",
-    name: "",
-    price: "",
-    category: "",
-    image: "",
-  });
+  const [formData, setFormData] = useState({ ...empty_form });
 
   const [open, setOpen] = useState(false);
   const handleOpen = (product) => {
     setOpen(true);
-    setFormData({ ...product });
+    setFormData((prev) => {
+      Object.keys(product).filter((key) => {
+        if (Array.isArray(product[key]) && product[key].length === 0)
+          product[key] = [""];
+      });
+      return { ...prev, ...product };
+    });
   };
+
+  console.log(formData);
   const handleClose = () => setOpen(false);
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    staleTime: Infinity,
+    queryFn: getAllCategories,
+  });
 
   const deleteMutation = useMutation({
     mutationFn: deleteProductById,
@@ -63,6 +87,16 @@ export default function ProductTable() {
     setOpen(false);
   };
 
+  const handleChange = (text, field, collection, index = null) => {
+    console.log(collection);
+    console.log(index);
+    console.log(collection[index - 1]);
+    setFormData((prev) => {
+      collection[index] = text;
+      return { ...prev, [field]: collection };
+    });
+  };
+
   if (isLoading)
     return (
       <div className="flex w-full gap-4">
@@ -84,7 +118,7 @@ export default function ProductTable() {
     );
   if (isError)
     return (
-      <div className="flex flex-col items-center bg-white rounded shadow p-4">
+      <div className="flex flex-col items-center text-black bg-white rounded shadow p-4">
         <XCircle size={50}></XCircle>
         <h3 className="text-2xl font-semibold text-center">
           Failed to load Products
@@ -94,7 +128,7 @@ export default function ProductTable() {
 
   if (isSuccess)
     return (
-      <div className="overflow-x-auto bg-white rounded shadow">
+      <div className="overflow-x-auto bg-white rounded shadow text-black">
         <table className="min-w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-50 border-b">
@@ -139,49 +173,99 @@ export default function ProductTable() {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          className="flex justify-center items-center"
+          className="flex justify-center items-center text-black"
         >
           <div className="bg-white p-4  w-fit rounded">
             <form
               onSubmit={(e) => {
                 handleUpdate(e, formData);
               }}
-              className="p-4 bg-white rounded space-y-4"
+              className="p-4 bg-white rounded shadow space-y-4 max-h-80 overflow-scroll"
             >
               <h2 className="text-xl font-medium">Update Product</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input
-                  className="border-b p-2 bg-gray-100"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+              <div className="flex flex-wrap gap-4 flex-col items-start ">
+                {Object.keys(formData).map((field) => {
+                  if (field === "_id") return;
+                  if (
+                    typeof formData[field] === "string" &&
+                    !["category", "subCategory"].includes(field)
+                  )
+                    return (
+                      <TextField
+                        key={field}
+                        value={formData[field]}
+                        onChange={(e) => {
+                          setFormData({
+                            ...formData,
+                            [field]: e.target.value,
+                          });
+                        }}
+                        variant="outlined"
+                        label={field}
+                      />
+                    );
+                  if (["category", "subCategory"].includes(field))
+                    return (
+                      <Autocomplete
+                        key={field}
+                        value={
+                          categories?.[field]?.find(
+                            (opt) => opt._id === formData[field]
+                          ) || null
+                        }
+                        onChange={(e, val) => {
+                          setFormData({
+                            ...formData,
+                            [field]: val ? val._id : "",
+                          });
+                        }}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id || option._id === value
+                        }
+                        disablePortal
+                        options={categories[field]}
+                        getOptionLabel={(option) => option.name}
+                        // clearOnEscape
+                        sx={{ width: 300 }}
+                        renderInput={(params) => (
+                          <TextField {...params} label={field} />
+                        )}
+                      />
+                    );
+                  if (Array.isArray(formData[field])) {
+                    console.log("yes");
+                    return (
+                      <DynamicTextFields
+                        value={formData[field]}
+                        handleChange={handleChange}
+                        key={field}
+                        field={field}
+                      />
+                    );
                   }
-                />
-                <input
-                  className="border-b p-2 bg-gray-100"
-                  placeholder="Price"
-                  value={formData.price}
-                  onChange={(e) =>
-                    setFormData({ ...formData, price: e.target.value })
-                  }
-                />
-                <input
-                  className="border-b p-2 bg-gray-100"
-                  placeholder="Category"
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
-                />
-                <input
-                  className="border-b p-2 bg-gray-100"
-                  placeholder="Image URL"
-                  value={formData.image}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image: e.target.value })
-                  }
-                />
+                })}
+                <FormControl>
+                  <FormLabel>Featured</FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue={false}
+                    onChange={(_, val) => {
+                      setFormData({ ...formData, isFeatured: val });
+                    }}
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                  </RadioGroup>
+                </FormControl>
               </div>
               <button
                 type="submit"

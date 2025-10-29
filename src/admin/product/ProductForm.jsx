@@ -10,40 +10,30 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 import IncField from "../components/DynamicTextFields";
 import DynamicTextFields from "../components/DynamicTextFields";
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
+import { empty_form } from "./values";
 
 export default function ProductForm() {
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    category: "combo",
-    subCategory: "combo",
-    tags: [""],
-    price: "",
-    thumbnail: "",
-    images: [""],
-    colors: [""],
-    sizes: [""],
-    weight: "",
-    dimensions: {
-      length: "",
-      width: "",
-      height: "",
-    },
-    isFeatured: false,
-    isActive: true,
-  });
+  const [formData, setFormData] = useState({ ...empty_form });
 
   const mutation = useMutation({
     mutationFn: addProduct, // ✅ Replace with your real endpoint
     onSuccess: () => {
       queryClient.invalidateQueries(["products"]);
-      setFormData({ name: "", price: "", category: "", image: "" });
+      setFormData({ ...empty_form });
     },
   });
 
   const { data: categories, isSuccess } = useQuery({
     queryKey: ["categories"],
+    staleTime: Infinity,
     queryFn: getAllCategories,
   });
 
@@ -51,6 +41,7 @@ export default function ProductForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("handleSubmit:", formData);
     mutation.mutate(formData);
   };
 
@@ -64,7 +55,7 @@ export default function ProductForm() {
     });
   };
 
-  console.log(formData["tags"]);
+  // console.log(formData["tags"]);
 
   return (
     <>
@@ -75,7 +66,10 @@ export default function ProductForm() {
         <h2 className="text-xl font-medium">Add Product</h2>
         <div className="flex flex-wrap gap-4 flex-col items-start ">
           {Object.keys(formData).map((field) => {
-            if (typeof formData[field] === "string")
+            if (
+              typeof formData[field] === "string" &&
+              !["category", "subCategory"].includes(field)
+            )
               return (
                 <TextField
                   key={field}
@@ -87,16 +81,25 @@ export default function ProductForm() {
                   label={field}
                 />
               );
-            if (formData[field] === "combo")
+            if (["category", "subCategory"].includes(field))
               return isSuccess ? (
                 <Autocomplete
                   key={field}
-                  value={formData[field]}
-                  onChange={(e) => {
-                    setFormData({ ...formData, [field]: e.target.value });
+                  value={
+                    categories?.[field]?.find(
+                      (opt) => opt._id === formData[field]
+                    ) || null
+                  }
+                  onChange={(e, val) => {
+                    setFormData({ ...formData, [field]: val ? val._id : "" });
                   }}
+                  isOptionEqualToValue={(option, value) =>
+                    option._id === value._id || option._id === value
+                  }
                   disablePortal
                   options={categories[field]}
+                  getOptionLabel={(option) => option.name}
+                  // clearOnEscape
                   sx={{ width: 300 }}
                   renderInput={(params) => (
                     <TextField {...params} label={field} />
@@ -127,6 +130,20 @@ export default function ProductForm() {
               );
             }
           })}
+          <FormControl>
+            <FormLabel>Featured</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue={false}
+              onChange={(_, val) => {
+                setFormData({ ...formData, isFeatured: val });
+              }}
+              name="radio-buttons-group"
+            >
+              <FormControlLabel value={false} control={<Radio />} label="No" />
+              <FormControlLabel value={true} control={<Radio />} label="Yes" />
+            </RadioGroup>
+          </FormControl>
         </div>
         <button
           type="submit"

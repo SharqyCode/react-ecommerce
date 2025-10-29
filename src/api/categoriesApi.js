@@ -5,14 +5,14 @@ const BASE_URL = "http://localhost:5000/api/categories"
 
 export const getAllCategories = async () => {
     const pew = (await (axios.get(BASE_URL))).data;
-    console.log("Get categories:", pew);
     let category = [];
     let subCategory = [];
+    // console.log("Get categories:", pew);
     pew.map((item) => {
         if (item.parentCategory)
-            subCategory.push(item.name)
+            subCategory.push({ _id: item._id, name: item.name })
         else
-            category.push(item.name)
+            category.push({ _id: item._id, name: item.name })
     })
 
     return { category, subCategory }
