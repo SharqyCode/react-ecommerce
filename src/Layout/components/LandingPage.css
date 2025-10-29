@@ -1,10 +1,9 @@
 .landing {
-  /* background-image: url('https://placehold.co/1920x1080/333/555?text=Welcome+Hero'); */
   background-size: cover;
   background-position: center;
   height: calc(
     100vh - 70px
-  ); /* Full height minus the header height */
+  ); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,7 +54,6 @@
   background: #ff4c4c;
 }
 
-/* Categories Section */
 .categories-section {
   padding: 60px 40px;
   text-align: center;
@@ -90,8 +88,9 @@
 
 .category-card img {
   width: 100%;
-  height: auto;
-  display: block;
+  aspect-ratio: 1 / 1;   
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .category-card h3 {
@@ -101,7 +100,6 @@
   color: #fff;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .landing h1 {
     font-size: 2rem;
@@ -113,4 +111,79 @@
   .categories-section {
     padding: 40px 20px;
   }
+}
+
+/* Slider Section */
+.landing {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay Text */
+.landing-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 2;
+}
+
+.shop-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.shop-btn:hover {
+  background-color: #cc0000;
+}
+
+/* Dots */
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dot.active {
+  background: #ff0000;
 }
