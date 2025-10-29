@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Products from "./components/Products";
 import CategoriesBar from "./components/CategoriesBar";
@@ -79,7 +79,9 @@ function Layout() {
             <li>
               <a href="#" className="profile-link">
                 <ProfileIcon />
-                <span>Login</span>
+                <NavLink to={"/login"}>
+                  <span>Login</span>
+                </NavLink>
               </a>
             </li>
             {/* --- End of new link --- */}

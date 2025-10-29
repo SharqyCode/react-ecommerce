@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost:5000/api/products"
 
 export const getAllProducts = async () => {
     const pew = (await (axios.get(BASE_URL))).data;
-    console.log(pew);
+    console.log("Get Products:", pew);
     return pew
 }
 

@@ -9,10 +9,16 @@ Updated #root to support flex layout for sticky footer #root {
 main {
   /* Prevents content from hiding behind the TWO fixed headers */
   /* 70px (header) + 50px (categories) = 120px */
-  padding-top: 120px;
+  /* padding-top: 120px; */
   flex-grow: 1;
   /* This makes main take up available space, pushing footer down */
 }
+
+.Layout-header {
+  padding: 0px 20px;
+}
+
+
 
 .app-header {
   background: #1a1a1a;
@@ -24,6 +30,7 @@ main {
   left: 0;
   z-index: 1000;
   box-sizing: border-box;
+
   /* Ensures padding doesn't affect width */
 }
 
@@ -34,7 +41,9 @@ main {
   height: 70px;
   max-width: 1280px;
   margin: 0 auto;
+
 }
+
 
 .nav-logo {
   font-size: 1.8rem;
@@ -184,7 +193,7 @@ main {
 
   /* Adjust main padding for new mobile header height */
   main {
-    padding-top: 185px;
+    /* padding-top: 185px; */
     /* Manually adjusted for new header + categories */
   }
 }

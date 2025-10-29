@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Skeleton from "@mui/material/Skeleton";
-import { XCircle } from "lucide-react";
+import { LogIn, XCircle } from "lucide-react";
 import {
   deleteProductById,
   getAllProducts,
@@ -49,7 +49,7 @@ export default function ProductTable() {
     },
   });
 
-  console.log("modal: ", formData);
+  // console.log("modal: ", formData);
 
   const handleUpdate = (e, product) => {
     e.preventDefault();
@@ -111,7 +111,7 @@ export default function ProductTable() {
               >
                 <td className="p-3">{product.name}</td>
                 <td className="p-3">${product.price}</td>
-                <td className="p-3">{product.category}</td>
+                <td className="p-3">{product.category.name}</td>
                 <td className="p-3 flex flex-wrap gap-2">
                   <button
                     onClick={() => {

@@ -4,12 +4,19 @@
   padding: 0 40px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   height: 50px;
-  position: fixed;
+  /* position: fixed; */
   top: 70px;
   /* Positioned just below the main header */
   left: 0;
   z-index: 999;
   box-sizing: border-box;
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .categories-bar {
+    display: block;
+  }
 }
 
 .categories-bar ul {
