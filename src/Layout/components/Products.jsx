@@ -1,77 +1,53 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Products.css';
-
-const allProducts = [
-  {
-    id: 1,
-    name: 'Smart Watch',
-    price: '$199',
-    img: 'https://placehold.co/300x300/e0e0e0/333?text=Smart+Watch',
-  },
-  {
-    id: 2,
-    name: 'Wireless Earbuds',
-    price: '$149',
-    img: 'https://placehold.co/300x300/d0d0d0/333?text=Earbuds',
-  },
-  {
-    id: 3,
-    name: 'Running Sneakers',
-    price: '$129',
-    img: 'https://placehold.co/300x300/c0c0c0/333?text=Sneakers',
-  },
-  {
-    id: 4,
-    name: 'Gaming Headset',
-    price: '$99',
-    img: 'https://placehold.co/300x300/b0b0b0/333?text=Headset',
-  },
-  {
-    id: 5,
-    name: '4K Monitor',
-    price: '$349',
-    img: 'https://placehold.co/300x300/a0a0a0/333?text=Monitor',
-  },
-  {
-    id: 6,
-    name: 'Mechanical Keyboard',
-    price: '$159',
-    img: 'https://placehold.co/300x300/909090/333?text=Keyboard',
-  },
-  {
-    id: 7,
-    name: 'Leather Backpack',
-    price: '$89',
-    img: 'https://placehold.co/300x300/808080/333?text=Backpack',
-  },
-  {
-    id: 8,
-    name: 'Coffee Maker',
-    price: '$59',
-    img: 'https://placehold.co/300x300/707070/333?text=Coffee+Maker',
-  },
-];
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Products.css";
+import { getAllProducts } from "../../api/productsApi";
 
 const Products = ({ isHomePage = false }) => {
-  const productsToShow = isHomePage
-    ? allProducts.slice(0, 4)
-    : allProducts;
-  const title = isHomePage ? 'Featured Products' : 'All Products';
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getAllProducts();
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("Failed to load products.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const productsToShow = isHomePage ? products.slice(0, 4) : products;
+  const title = isHomePage ? "Featured Products" : "All Products";
+
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <section className="products">
       <h2>{title}</h2>
       <div className="product-grid">
         {productsToShow.map((p) => (
-          <div className="product-card" key={p.id}>
-            <img src={p.img} alt={p.name} />
+          <div className="product-card" key={p._id || p.id}>
+            <img
+              // src={p.image || "https://via.placeholder.com/300"}
+              src={p.image || "https://placehold.co/300x300?text=No+Image"}
+              alt={p.name}
+            />
             <h3>{p.name}</h3>
-            <p>{p.price}</p>
+            <p>${p.price}</p>
             <button>Add to Cart</button>
           </div>
         ))}
       </div>
+
       {isHomePage && (
         <Link to="/products" className="view-all-btn">
           View All Products
