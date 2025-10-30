@@ -6,16 +6,21 @@ import {
   Card,
   Typography,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useThemeContext } from "../../context/ThemeContext";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { mode } = useThemeContext();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    passwordConfirm: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,9 +31,9 @@ export default function RegisterPage() {
   };
 
   const handleRegister = async () => {
-    const { name, email, password, passwordConfirm } = formData;
+    const { name, email, password, confirmPassword } = formData;
 
-    if (!name || !email || !password || !passwordConfirm) {
+    if (!name || !email || !password || !confirmPassword) {
       setError("Please fill all fields");
       return;
     }
@@ -44,7 +49,7 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password !== passwordConfirm) {
+    if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
@@ -82,15 +87,30 @@ export default function RegisterPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #1976d2, #42a5f5)",
+        transition: "0.3s",
       }}
     >
-      <Card sx={{ width: 450, p: 5, borderRadius: 4, backgroundColor: "#fff" }}>
+      <Card
+        sx={{
+          width: 450,
+          p: 5,
+          borderRadius: 4,
+          boxShadow: 4,
+          backgroundColor:
+            mode === "light" ? "#fff" : theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          transition: "0.3s",
+        }}
+      >
         <Typography
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ fontWeight: "bold", color: "#1976d2", mb: 3 }}
+          sx={{
+            fontWeight: "bold",
+            color: mode === "light" ? "#1976d2" : "#90caf9",
+            mb: 3,
+          }}
         >
           Register
         </Typography>
@@ -102,6 +122,11 @@ export default function RegisterPage() {
           value={formData.name}
           onChange={handleChange}
           margin="normal"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+          }}
         />
         <TextField
           fullWidth
@@ -111,6 +136,11 @@ export default function RegisterPage() {
           value={formData.email}
           onChange={handleChange}
           margin="normal"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+          }}
         />
         <TextField
           fullWidth
@@ -120,15 +150,25 @@ export default function RegisterPage() {
           value={formData.password}
           onChange={handleChange}
           margin="normal"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+          }}
         />
         <TextField
           fullWidth
           label="Confirm Password"
-          name="passwordConfirm"
+          name="confirmPassword"
           type="password"
-          value={formData.passwordConfirm}
+          value={formData.confirmPassword}
           onChange={handleChange}
           margin="normal"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+          }}
         />
 
         {error && (
@@ -145,8 +185,12 @@ export default function RegisterPage() {
             py: 1.3,
             fontSize: "1rem",
             fontWeight: "bold",
-            backgroundColor: "#1976d2",
-            "&:hover": { backgroundColor: "#115293" },
+            borderRadius: "10px",
+            backgroundColor:
+              mode === "light" ? "#1976d2" : theme.palette.primary.main,
+            "&:hover": {
+              backgroundColor: mode === "light" ? "#1565c0" : "#2196f3",
+            },
           }}
           onClick={handleRegister}
           disabled={loading}
@@ -161,7 +205,12 @@ export default function RegisterPage() {
         <Typography
           variant="body2"
           align="center"
-          sx={{ mt: 2, color: "#1976d2", cursor: "pointer" }}
+          sx={{
+            mt: 2,
+            color: mode === "light" ? "#1976d2" : "#90caf9",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
           onClick={() => navigate("/")}
         >
           Already have an account? Login

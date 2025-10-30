@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Snackbar,
   Slide,
+  useTheme,
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { getUserById } from "../../api/usersApi";
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const context = useOutletContext();
 
@@ -80,10 +82,20 @@ export default function LoginPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #1976d2, #42a5f5)",
+        color: "text.primary",
+        transition: "all 0.3s ease",
       }}
     >
-      <Card sx={{ width: 400, p: 4, borderRadius: 4, backgroundColor: "#fff" }}>
+      <Card
+        sx={{
+          width: 400,
+          p: 4,
+          borderRadius: 4,
+          bgcolor: "background.paper",
+          boxShadow: 4,
+          transition: "all 0.3s ease",
+        }}
+      >
         <CardContent>
           <Typography
             variant="h4"
@@ -91,7 +103,7 @@ export default function LoginPage() {
             gutterBottom
             sx={{
               fontWeight: "bold",
-              color: "#1976d2",
+              color: theme.palette.primary.main,
               letterSpacing: 1,
               mb: 4,
             }}
@@ -107,8 +119,11 @@ export default function LoginPage() {
                 fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": { borderRadius: 3 },
+                }}
               />
+
               <TextField
                 label="Password"
                 type="password"
@@ -116,7 +131,9 @@ export default function LoginPage() {
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": { borderRadius: 3 },
+                }}
               />
 
               {error && (
@@ -134,9 +151,11 @@ export default function LoginPage() {
                   fontSize: "1rem",
                   fontWeight: "bold",
                   borderRadius: "10px",
-                  backgroundColor: "#1976d2",
+                  backgroundColor: theme.palette.primary.main,
                   color: "#fff",
-                  "&:hover": { backgroundColor: "#1565c0" },
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary.dark,
+                  },
                 }}
                 disabled={loading}
               >
@@ -148,14 +167,18 @@ export default function LoginPage() {
               </Button>
 
               <Box
-                sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mt: 1,
+                }}
               >
                 <Link
                   underline="hover"
                   sx={{
                     fontSize: 16,
                     color: "text.secondary",
-                    fontFamily: "'Poppins', sans-serif",
+                    cursor: "pointer",
                   }}
                   onClick={() => navigate("/forgot")}
                 >
@@ -166,10 +189,9 @@ export default function LoginPage() {
                   underline="hover"
                   sx={{
                     fontSize: 14,
-                    color: "#1976d2",
+                    color: theme.palette.primary.main,
                     fontWeight: "bold",
                     cursor: "pointer",
-                    fontFamily: "'Poppins', sans-serif",
                   }}
                   onClick={() => navigate("/register")}
                 >
