@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ThemeToggle from "./components/ThemeToggle";
 
 const Navbar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +19,6 @@ const Navbar = ({ onSearch }) => {
         onChange={handleSearch}
         className="search-input"
       />
-      <ThemeToggle />
     </nav>
   );
 };
