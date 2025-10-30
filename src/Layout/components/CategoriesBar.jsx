@@ -1,5 +1,7 @@
 import React from 'react';
 import './CategoriesBar.css';
+import { Link } from "react-router-dom";
+
 
 const CategoriesBar = () => {
 
@@ -7,9 +9,7 @@ const CategoriesBar = () => {
     <nav className="categories-bar">
       <ul>
         <li>
-          <button type="button" className="category-action-btn">
-            Electronics
-          </button>
+          <Link to="/products?category=electronics">Electronics</Link>
         </li>
         <li>
           <button type="button" className="category-action-btn">

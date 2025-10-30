@@ -9,27 +9,40 @@ const Products = ({ isHomePage = false }) => {
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
 
+  const category = searchParams.get("category");
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getAllProducts();
-        setProducts(data);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products.");
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const data = await getAllProducts();
+      setProducts(data);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      setError("Failed to load products.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProducts();
-  }, []);
+  fetchProducts();
+}, []);
 
-  const filteredProducts = products.filter((p) =>
-    p.name?.toLowerCase().includes(searchQuery)
-  );
+
+const filteredProducts = products.filter((p) => {
+  const productCategory =
+    typeof p.category === "string"
+      ? p.category.toLowerCase()
+      : p.category?.name?.toLowerCase() || "";
+
+  const matchCategory =
+    !category || productCategory === category.toLowerCase();
+
+  const matchSearch = p.name?.toLowerCase().includes(searchQuery);
+
+  return matchCategory && matchSearch;
+});
+
 
   const productsToShow = isHomePage
     ? filteredProducts.slice(0, 4)
@@ -37,6 +50,8 @@ const Products = ({ isHomePage = false }) => {
 
   const title = isHomePage
     ? "Featured Products"
+    : category
+    ? `${category.charAt(0).toUpperCase() + category.slice(1)}`
     : searchQuery
     ? `Search results for "${searchQuery}"`
     : "All Products";
@@ -44,7 +59,7 @@ const Products = ({ isHomePage = false }) => {
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>{error}</p>;
   if (filteredProducts.length === 0)
-    return <p>No products found matching "{searchQuery}"</p>;
+    return <p>No products found matching "{searchQuery || category}"</p>;
 
   return (
     <section className="products">

@@ -9,6 +9,12 @@ export const getAllProducts = async () => {
     return pew
 }
 
+export const getProductsByCategory = async (category) => {
+  const { data } = await axios.get(`${BASE_URL}?category=${category}`);
+  return data;
+};
+
+
 export const getProdctById = async (productId) => {
     const pew = (await (axios.get(`${BASE_URL}/${productId}`))).data
     console.log(pew);
