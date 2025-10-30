@@ -6,7 +6,6 @@ import CategoriesBar from "./components/CategoriesBar";
 import Footer from "./components/Footer"; // Import the new Footer
 import "./Layout.css";
 import { Snackbar } from "@mui/material";
-import ThemeToggleButton from "../components/theme/ThemeToggleButton";
 
 // SVG Icon for the Search button
 const SearchIcon = () => (
@@ -52,7 +51,6 @@ function Layout() {
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   return (
     <>
-      <ThemeToggleButton />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         autoHideDuration={2000}
