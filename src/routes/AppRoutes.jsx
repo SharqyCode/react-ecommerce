@@ -1,5 +1,7 @@
-
+// src/routes/AppRoutes.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import Home from "../pages/Home";
+// import Shop from "../pages/Shop";
 import NotFound from "../pages/NotFound";
 import AdminDashboard from "../admin/pages/AdminDashboard";
 import AdminUsers from "../admin/pages/AdminUsers";
