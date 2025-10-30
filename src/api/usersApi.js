@@ -10,8 +10,8 @@ export const getAllUsers = async () => {
 }
 
 export const getUserById = async (userId) => {
-    const pew = (await (axios.get(`${BASE_URL}/${userId}`))).data
-    console.log(pew);
+    const pew = (await (axios.get(`${BASE_URL}/${userId}`))).data.data.user
+    console.log('api:', pew);
     return pew
 }
 

@@ -9,15 +9,18 @@ export default function AdminSidebar() {
     <>
       {isOpen && (
         <div
+          onClick={() => {
+            setIsOpen(false);
+          }}
           id="aside-backdrop"
-          className="bg-black opacity-20 absolute w-full h-full"
+          className="bg-black opacity-20 absolute w-full h-full z-20"
         ></div>
       )}
       <div id="placeholder" className="w-16 bg-white"></div>
       <aside
         className={`${
           isOpen ? "w-64" : "w-16"
-        } absolute h-full bg-white border-r border-gray-200 transition-all duration-300 p-4 z-10`}
+        } absolute h-full bg-white border-r border-gray-200 transition-all duration-300 p-4 z-20`}
       >
         <button
           onClick={() => setIsOpen(!isOpen)}

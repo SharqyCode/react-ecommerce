@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -10,7 +10,11 @@ import {
   Link,
   Stack,
   CircularProgress,
+  Snackbar,
+  Slide,
 } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import { getUserById } from "../../api/usersApi";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,6 +22,8 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const context = useOutletContext();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,9 +52,17 @@ export default function LoginPage() {
       setLoading(false);
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
-        alert("Login successful!");
-        navigate("/"); // redirect if needed
+        context.setSnackBarOpen(true);
+
+        const token = data.token;
+        localStorage.setItem("token", token);
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        const user = await getUserById(decodedToken.id);
+        console.log(user);
+        if (user.role === "admin") navigate("/admin"); // redirect if needed
+        else navigate("/");
+        // alert("Login successful!");
       } else {
         setError(data.message || "Login failed");
       }

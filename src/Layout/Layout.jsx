@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Products from "./components/Products";
 import CategoriesBar from "./components/CategoriesBar";
 import Footer from "./components/Footer"; // Import the new Footer
 import "./Layout.css";
+import { Snackbar } from "@mui/material";
 
 // SVG Icon for the Search button
 const SearchIcon = () => (
@@ -47,8 +48,16 @@ const ProfileIcon = () => (
 // --- End of new icon ---
 
 function Layout() {
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={2000}
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+        message="Welcome Back, Soldier!"
+      />
       <header className="Layout-header">
         <nav className="navbar">
           <Link to="/" className="nav-logo">
@@ -90,7 +99,7 @@ function Layout() {
       </header>
       <CategoriesBar />
       <main>
-        <Outlet />
+        <Outlet context={{ snackBarOpen, setSnackBarOpen }} />
       </main>
       {/* --- NEW Footer --- */}
       <Footer />
