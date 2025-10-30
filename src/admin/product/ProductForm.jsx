@@ -2,13 +2,8 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addProduct } from "../../api/productsApi";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import { getAllCategories } from "../../api/categoriesApi";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-
-import IncField from "../components/DynamicTextFields";
 import DynamicTextFields from "../components/DynamicTextFields";
 import {
   FormControl,
@@ -148,7 +143,7 @@ export default function ProductForm() {
         <button
           type="submit"
           disabled={mutation.isLoading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 sticky bottom-0 left-full"
         >
           {mutation.isLoading ? "Adding..." : "Add Product"}
         </button>

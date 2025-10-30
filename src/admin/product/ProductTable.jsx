@@ -16,12 +16,12 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { empty_form } from "./values";
 import { getAllCategories } from "../../api/categoriesApi";
 import DynamicTextFields from "../components/DynamicTextFields";
+import AdminProductTable from "./AdminProductTable";
 
 export default function ProductTable() {
   const queryClient = useQueryClient();
@@ -129,45 +129,11 @@ export default function ProductTable() {
   if (isSuccess)
     return (
       <div className="overflow-x-auto bg-white rounded shadow text-black">
-        <table className="min-w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-gray-50 border-b">
-              <th className="p-3 font-semibold">Name</th>
-              <th className="p-3 font-semibold">Price</th>
-              <th className="p-3 font-semibold">Category</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((product) => (
-              <tr
-                key={product._id}
-                className=" odd:bg-gray-200 hover:bg-blue-200"
-              >
-                <td className="p-3">{product.name}</td>
-                <td className="p-3">${product.price}</td>
-                <td className="p-3">{product.category.name}</td>
-                <td className="p-3 flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      handleOpen(product);
-                    }}
-                    className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 cursor-pointer"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleDelete(product._id);
-                    }}
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <AdminProductTable
+          handleDelete={handleDelete}
+          handleOpen={handleOpen}
+          data={data}
+        />
         <Modal
           open={open}
           onClose={handleClose}
