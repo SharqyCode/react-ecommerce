@@ -6,13 +6,6 @@ Updated #root to support flex layout for sticky footer #root {
   padding: 0;
 }
 
-main {
-  /* Prevents content from hiding behind the TWO fixed headers */
-  /* 70px (header) + 50px (categories) = 120px */
-  padding-top: 120px;
-  flex-grow: 1;
-  /* This makes main take up available space, pushing footer down */
-}
 
 .app-header {
   background: #1a1a1a;
@@ -34,6 +27,7 @@ main {
   height: 70px;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0px 20px;
 }
 
 .nav-logo {
@@ -44,6 +38,8 @@ main {
   flex-shrink: 0;
   /* Prevents logo from shrinking */
 }
+
+
 
 /* --- Updated Search Bar Styles --- */
 .search-bar {
@@ -60,7 +56,7 @@ main {
   border: 1px solid #444;
   /* Subtle border */
   overflow: hidden;
-  transition: box-shadow 0.3s, border-color 0.3s;
+  transition: box-shadow 0.3s, border-color 0.3s;;
 }
 
 /* Add a focus effect to the whole bar */
@@ -183,10 +179,7 @@ main {
   }
 
   /* Adjust main padding for new mobile header height */
-  main {
-    padding-top: 185px;
-    /* Manually adjusted for new header + categories */
-  }
+  
 }
 
 @media (max-width: 480px) {

@@ -31,6 +31,17 @@ export default function AppRoutes() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot" element={<ForgotPassword />} />
+        {/*
+        
+        <Route path="/" element={<categoryLayout />}>
+          <Route index element={<categoryMain />} />
+          <Route path="/Electronics" element={<Electronics />} />
+          <Route path="/aparal" element={<aparal />} />
+          .
+          .
+          .
+        </Route> 
+         */}
         </Route>
         <Route path="/admin" element={<AdminDashboard />}>
           <Route path="users" element={<AdminUsers />} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "./Products.css";
 import { getAllProducts } from "../../api/productsApi";
 
@@ -7,6 +7,9 @@ const Products = ({ isHomePage = false }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
+
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,11 +27,24 @@ const Products = ({ isHomePage = false }) => {
     fetchProducts();
   }, []);
 
-  const productsToShow = isHomePage ? products.slice(0, 4) : products;
-  const title = isHomePage ? "Featured Products" : "All Products";
+  const filteredProducts = products.filter((p) =>
+    p.name?.toLowerCase().includes(searchQuery)
+  );
+
+  const productsToShow = isHomePage
+    ? filteredProducts.slice(0, 4)
+    : filteredProducts;
+
+  const title = isHomePage
+    ? "Featured Products"
+    : searchQuery
+    ? `Search results for "${searchQuery}"`
+    : "All Products";
 
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>{error}</p>;
+  if (filteredProducts.length === 0)
+    return <p>No products found matching "{searchQuery}"</p>;
 
   return (
     <section className="products">
@@ -37,7 +53,6 @@ const Products = ({ isHomePage = false }) => {
         {productsToShow.map((p) => (
           <div className="product-card" key={p._id || p.id}>
             <img
-              // src={p.image || "https://via.placeholder.com/300"}
               src={p.image || "https://placehold.co/300x300?text=No+Image"}
               alt={p.name}
             />
