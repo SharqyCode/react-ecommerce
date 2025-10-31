@@ -1,0 +1,68 @@
+:root {
+  --primary-color: #1976d2;
+  --primary-hover: #73ceff;
+}
+
+.categories-bar {
+  width: 100%;
+  background: #1a1a1a;
+  padding: 0 40px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  height: 50px;
+  /* position: fixed; */
+  top: 70px;
+  /* Positioned just below the main header */
+  left: 0;
+  z-index: 999;
+  box-sizing: border-box;
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .categories-bar {
+    display: block;
+  }
+}
+
+.categories-bar ul {
+  list-style: none;
+  margin: 0 auto;
+  /* Center the list */
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  /* Center items horizontally */
+  align-items: center;
+  height: 100%;
+  max-width: 1280px;
+}
+
+/* This style targets the buttons.
+  It removes all default button styling (like the grey box)
+  and makes them look like plain text on the black bar.
+*/
+.category-action-btn {
+  /* Reset default button styles */
+  background: none;
+  border: none;
+  margin: 0;
+
+  /* Apply styles to match the old links */
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+  /* Use the same font as the rest of the page */
+  cursor: pointer;
+  transition: color 0.3s;
+
+  /* Use padding to create the clickable area */
+  padding: 15px 20px;
+  display: block;
+  height: 100%;
+}
+
+/* This adds back the red hover effect */
+.category-action-btn:hover {
+  color: var(--primary-color);
+}

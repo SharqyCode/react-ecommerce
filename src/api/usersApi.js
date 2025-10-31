@@ -28,7 +28,12 @@ export const updateUser = async (userId, user) => {
 }
 
 export const deleteUserById = async (userId) => {
-    const pew = (await (axios.delete(`${BASE_URL}/${userId}`))).data
+    const token = localStorage.getItem('token')
+    const pew = (await (axios.delete(`${BASE_URL}/${userId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    })))
     console.log(pew);
     return pew
 }
