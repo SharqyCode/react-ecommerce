@@ -21,6 +21,7 @@ import Layout from "../Layout/Layout";
 import { RoleGuard } from "./protection/RoleGuard";
 import Unauthorized from "../pages/Unauthorized";
 import LoggedInGuard from "./protection/LoggedInGuard";
+import CartPage from "../features/cart/CartPage";
 
 export default function AppRoutes() {
   return (
@@ -31,7 +32,7 @@ export default function AppRoutes() {
           {/* <Route path="/shop" element={<Shop />} /> */}
           <Route index element={<LandingPage />} />
           <Route path="products" element={<Products />} />
-          <Route path="cart" element={<Cart />} />
+          <Route path="cart" element={<CartPage />} />
         </Route>
         {/* Start Authentication Routes */}
         <Route element={<LoggedInGuard />}>

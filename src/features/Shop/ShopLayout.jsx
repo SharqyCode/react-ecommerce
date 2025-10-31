@@ -61,9 +61,7 @@ function ShopLayout() {
       <div className="flex justify-end p-2">
         <ThemeToggleButton />
       </div>
-      <header className="Layout-header">
-        <Navbar />
-      </header>
+      <Navbar />
       <CategoriesBar />
       <main>
         <Outlet />
