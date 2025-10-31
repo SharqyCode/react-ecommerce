@@ -11,12 +11,11 @@ export default function ThemeToggleButton() {
       variant={mode === "light" ? "contained" : "outlined"}
       sx={{
         textTransform: "none",
-        fontWeight: "bold",
-        borderRadius: 3,
-        px: 2,
+
+        borderRadius: 100,
       }}
     >
-      {mode === "light" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+      {mode === "light" ? "☀️" : "🌙"}
     </Button>
   );
 }

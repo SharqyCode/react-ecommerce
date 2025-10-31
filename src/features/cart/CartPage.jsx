@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -12,15 +12,47 @@ import {
   Button,
   Box,
   Avatar,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useCart } from "../../context/CartContext";
+import { useThemeContext } from "../../context/ThemeContext";
 
 const CartPage = () => {
   const { products, removeProduct, increaseQuantity, decreaseQuantity, total } =
     useCart();
+
+  const { mode } = useThemeContext();
+  const theme = useTheme();
+  const isLight = mode === "light";
+
+  const makePayment = async () => {
+    const body = { products };
+    const headers = { "Content-Type": "application/json" };
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/create-checkout-session`,
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify(body),
+        }
+      );
+      if (response.status !== 200) throw new Error(response.error);
+      const data = await response.json();
+
+      if (data?.url) {
+        window.location.assign(data.url);
+      } else {
+        console.error("Stripe Checkout URL missing:", data);
+      }
+    } catch (err) {
+      console.log("error:", err.message);
+    }
+  };
 
   return (
     <Card
@@ -28,7 +60,9 @@ const CartPage = () => {
         maxWidth: 900,
         margin: "40px auto",
         boxShadow: 8,
-        background: "#f4f4f7ff",
+        bgcolor: isLight ? "#f4f4f7" : "#1e1e1e",
+        color: isLight ? "#000" : "#fff",
+        transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
       <CardContent>
@@ -36,39 +70,46 @@ const CartPage = () => {
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ fontWeight: "bold" }}
+          sx={{ fontWeight: "bold", color: isLight ? "#000" : "#fff" }}
         >
           Cart
         </Typography>
 
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#ffffffff" }}>
+            <TableRow
+              sx={{
+                background: isLight ? "#ffffff" : "#2c2c2c",
+                color: isLight ? "#000" : "#fff",
+              }}
+            >
               <TableCell>
-                <Typography fontWeight="bold">Product Image</Typography>
+                <Typography fontWeight="bold" color="inherit">
+                  Product Image
+                </Typography>
               </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold" align="center">
+              <TableCell align="center">
+                <Typography fontWeight="bold" color="inherit">
                   Product Name
                 </Typography>
               </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold" align="center">
+              <TableCell align="center">
+                <Typography fontWeight="bold" color="inherit">
                   Price
                 </Typography>
               </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold" align="center">
+              <TableCell align="center">
+                <Typography fontWeight="bold" color="inherit">
                   Quantity
                 </Typography>
               </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold" align="center">
+              <TableCell align="center">
+                <Typography fontWeight="bold" color="inherit">
                   SubTotal
                 </Typography>
               </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold" align="center">
+              <TableCell align="center">
+                <Typography fontWeight="bold" color="inherit">
                   Remove
                 </Typography>
               </TableCell>
@@ -79,12 +120,22 @@ const CartPage = () => {
             {products.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} align="center">
-                  Your cart is empty
+                  <Typography color="text.secondary">
+                    Your cart is empty
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (
               products.map((item) => (
-                <TableRow key={item.id}>
+                <TableRow
+                  key={item.id}
+                  sx={{
+                    backgroundColor: isLight ? "#fff" : "#2b2b2b",
+                    "&:hover": {
+                      backgroundColor: isLight ? "#f0f0f0" : "#383838",
+                    },
+                  }}
+                >
                   <TableCell>
                     <Avatar
                       src={item.img || "/placeholder.png"}
@@ -99,6 +150,7 @@ const CartPage = () => {
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <IconButton
                         size="small"
+                        color="inherit"
                         onClick={() => decreaseQuantity(item.id)}
                       >
                         <RemoveIcon fontSize="small" />
@@ -107,11 +159,11 @@ const CartPage = () => {
                         {item.quantity}
                       </Typography>
                       <IconButton
-                        align="center"
                         size="small"
+                        color="inherit"
                         onClick={() => increaseQuantity(item.id)}
                       >
-                        <AddIcon align="center" fontSize="small" />
+                        <AddIcon fontSize="small" />
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -140,10 +192,19 @@ const CartPage = () => {
             mt: 3,
           }}
         >
-          <Typography variant="h6">
+          <Typography variant="h6" color="inherit">
             Total: <strong>${total.toFixed(2)}</strong>
           </Typography>
-          <Button variant="contained" sx={{ background: "#b93030ff" }}>
+          <Button
+            onClick={makePayment}
+            variant="contained"
+            sx={{
+              background: theme.palette.primary.main,
+              "&:hover": {
+                background: theme.palette.primary.dark,
+              },
+            }}
+          >
             Checkout
           </Button>
         </Box>

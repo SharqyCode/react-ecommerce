@@ -14,16 +14,26 @@ import ShopLayout from "../features/Shop/ShopLayout";
 import LandingPage from "../features/Shop/components/LandingPage";
 import Products from "../features/Shop/components/Products";
 import Cart from "../features/pages/Cart";
-import PaySuccess from "../features/pages/PaySuccess";
-import PayCancel from "../features/pages/PayCancel";
 import PaymentLayout from "../features/pages/Layout/paymentLayout";
 import Layout from "../Layout/Layout";
 import { RoleGuard } from "./protection/RoleGuard";
 import Unauthorized from "../pages/Unauthorized";
 import LoggedInGuard from "./protection/LoggedInGuard";
 import CartPage from "../features/cart/CartPage";
+import PaySuccess from "../features/cart/PaySuccess";
+import PayCancel from "../features/cart/PayCancel";
+import { useThemeContext } from "../context/ThemeContext";
+import { useEffect } from "react";
 
 export default function AppRoutes() {
+  const { mode } = useThemeContext();
+  useEffect(() => {
+    if (mode === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [mode]);
   return (
     <Router>
       <Routes>

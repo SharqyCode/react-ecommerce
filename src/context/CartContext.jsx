@@ -10,18 +10,30 @@ export const CartProvider = ({ children }) => {
       name: "Product 1",
       price: 50,
       quantity: 2,
-      img: "/photo-1523275335684-37898b6baf30.avif",
+      thumbnail: "/photo-1523275335684-37898b6baf30.avif",
     },
     {
       id: 2,
       name: "Product 2",
       price: 100,
       quantity: 1,
-      img: "/photo-1505740420928-5e560c06d30e.avif",
+      thumbnail: "/photo-1505740420928-5e560c06d30e.avif",
     },
-    { id: 3, name: "Product 3", price: 75, quantity: 3, img: "bag.avif" },
-    { id: 4, name: "Product 4", price: 25, quantity: 3, img: "coach.avif" },
-    { id: 5, name: "Product 5", price: 45, quantity: 2, img: "watch.avif" },
+    { id: 3, name: "Product 3", price: 75, quantity: 3, thumbnail: "bag.avif" },
+    {
+      id: 4,
+      name: "Product 4",
+      price: 25,
+      quantity: 3,
+      thumbnail: "coach.avif",
+    },
+    {
+      id: 5,
+      name: "Product 5",
+      price: 45,
+      quantity: 2,
+      thumbnail: "watch.avif",
+    },
   ];
 
   const [products, setProducts] = useState(() => {
@@ -65,6 +77,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const resetCart = () => {
+    setProducts([]);
+  };
+
   const total = products.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -77,6 +93,7 @@ export const CartProvider = ({ children }) => {
         removeProduct,
         increaseQuantity,
         decreaseQuantity,
+        resetCart,
         total,
       }}
     >

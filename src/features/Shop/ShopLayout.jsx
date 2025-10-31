@@ -6,7 +6,6 @@ import CategoriesBar from "./components/CategoriesBar";
 import Footer from "./components/Footer"; // Import the new Footer
 import "./Layout.css";
 import { Snackbar } from "@mui/material";
-import ThemeToggleButton from "../../components/theme/ThemeToggleButton";
 import Navbar from "./components/Navbar";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
@@ -58,9 +57,6 @@ function ShopLayout() {
   console.log(mode);
   return (
     <div className={`${mode}`}>
-      <div className="flex justify-end p-2">
-        <ThemeToggleButton />
-      </div>
       <Navbar />
       <CategoriesBar />
       <main>

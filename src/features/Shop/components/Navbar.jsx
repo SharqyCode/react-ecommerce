@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { SearchIcon, ShoppingBasket, UserRound, Menu, X } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
-import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const { products } = useCart(); // ensure context provides cartItems
+  const { products } = useCart();
+  const navigate = useNavigate();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [pulse, setPulse] = useState(false);
+  const [showMiniCart, setShowMiniCart] = useState(false);
 
   const itemCount =
     products?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
+  const subtotal =
+    products?.reduce(
+      (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+      0
+    ) || 0;
 
-  // Trigger pulse animation when cart count changes
   useEffect(() => {
     if (itemCount > 0) {
       setPulse(true);
@@ -25,19 +33,19 @@ export default function Navbar() {
   }, [itemCount]);
 
   return (
-    <nav className="bg-[#1c1c1c] text-white shadow-md sticky top-0 z-50">
+    <nav className="bg-gray-100 dark:bg-[#1c1c1c] text-gray-900 dark:text-white shadow-md sticky top-0 z-50 transition-colors duration-300">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl font-bold text-[#1976d2] hover:text-[#73ceff] transition-colors duration-300"
+          className="text-2xl font-bold text-[#1976d2] dark:text-[#73ceff] hover:text-[#73ceff] dark:hover:text-[#1976d2] transition-colors duration-300"
         >
           ShopEase
         </Link>
 
-        {/* Desktop Search Bar */}
+        {/* Search Bar */}
         <motion.div
-          className="hidden md:flex items-center bg-[#2a2a2a] rounded-md overflow-hidden"
+          className="hidden md:flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden"
           animate={{
             width: searchFocused ? "40%" : "30%",
           }}
@@ -48,33 +56,34 @@ export default function Navbar() {
             placeholder="Search products..."
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            className="bg-transparent text-sm text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-400"
+            className="bg-transparent text-sm text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"
           />
-          <button className="px-3 py-2 text-gray-300 hover:text-[#73ceff] transition-colors duration-200">
+          <button className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors duration-200">
             <SearchIcon className="w-5 h-5" />
           </button>
         </motion.div>
 
-        {/* Desktop Links */}
+        {/* Nav Links */}
         <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
           <li>
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `hover:text-[#73ceff] transition-colors ${
-                  isActive ? "text-[#73ceff]" : ""
+                `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                  isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                 }`
               }
             >
               Home
             </NavLink>
           </li>
+
           <li>
             <NavLink
               to="/products"
               className={({ isActive }) =>
-                `hover:text-[#73ceff] transition-colors ${
-                  isActive ? "text-[#73ceff]" : ""
+                `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                  isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                 }`
               }
             >
@@ -82,49 +91,95 @@ export default function Navbar() {
             </NavLink>
           </li>
 
-          {/* Cart Link with Animated Badge */}
-          <li>
-            <NavLink
-              to="/cart"
-              className={({ isActive }) =>
-                `relative flex items-center gap-1 hover:text-[#73ceff] transition-colors ${
-                  isActive ? "text-[#73ceff]" : ""
-                }`
-              }
-            >
+          {/* Cart with mini preview */}
+          <li
+            className="relative"
+            onMouseEnter={() => setShowMiniCart(true)}
+            onMouseLeave={() => setShowMiniCart(false)}
+          >
+            <button className="relative flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
               <ShoppingBasket className="w-5 h-5" />
               <span>Cart</span>
+              {itemCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: pulse ? [1, 1.3, 1] : 1 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="absolute -top-2 -right-3 bg-[#1976d2] dark:bg-[#73ceff] text-white text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
+                >
+                  {itemCount}
+                </motion.span>
+              )}
+            </button>
 
-              <AnimatePresence>
-                {itemCount > 0 && (
-                  <motion.span
-                    key="cart-badge"
-                    initial={{ scale: 0 }}
-                    animate={{
-                      scale: pulse ? [1, 1.3, 1] : 1,
-                    }}
-                    exit={{ scale: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute -top-2 -right-3 bg-[#1976d2] text-white text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
-                  >
-                    {itemCount}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </NavLink>
+            {/* Mini Cart Dropdown */}
+            <AnimatePresence>
+              {showMiniCart && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-3 w-72 bg-white dark:bg-[#2a2a2a] rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 transition-colors"
+                >
+                  <div className="p-3 max-h-80 overflow-y-auto space-y-3">
+                    {products?.length > 0 ? (
+                      products.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-700 pb-2"
+                        >
+                          <img
+                            src={item.image || "https://placehold.co/60x60"}
+                            alt={item.name}
+                            className="w-12 h-12 object-cover rounded-md"
+                          />
+                          <div className="flex-1 text-sm">
+                            <p className="font-medium text-gray-900 dark:text-gray-100">
+                              {item.name}
+                            </p>
+                            <p className="text-gray-600 dark:text-gray-400">
+                              {item.quantity} × ${item.price.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400 text-center text-sm py-4">
+                        Your cart is empty.
+                      </p>
+                    )}
+                  </div>
+
+                  {products?.length > 0 && (
+                    <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+                      <div className="flex justify-between text-sm font-medium mb-3 text-gray-900 dark:text-gray-200">
+                        <span>Subtotal:</span>
+                        <span>${subtotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate("/cart")}
+                          className="flex-1 bg-[#1976d2] hover:bg-[#73ceff] text-white rounded-md py-1.5 text-sm transition"
+                        >
+                          View Cart
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </li>
 
-          {/* Auth Buttons */}
+          {/* Auth */}
           <li>
             {!user ? (
               <NavLink
                 to="/login"
                 className={({ isActive }) =>
-                  `flex items-center gap-1 hover:text-[#73ceff] transition-colors ${
-                    isActive ? "text-[#73ceff]" : ""
+                  `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                    isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                   }`
                 }
               >
@@ -134,29 +189,33 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={logout}
-                className="flex items-center gap-1 hover:text-[#73ceff] transition-colors"
+                className="flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
               >
                 <UserRound className="w-5 h-5" />
                 <span>Logout</span>
               </button>
             )}
           </li>
+
+          {/* Theme Toggle */}
+          <li className="ml-2">
+            <ThemeToggleButton />
+          </li>
         </ul>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-300 hover:text-[#73ceff] transition-colors"
+          className="md:hidden text-gray-700 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* --- Mobile Slide Drawer --- */}
+      {/* --- Mobile Drawer --- */}
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Overlay */}
             <motion.div
               key="overlay"
               initial={{ opacity: 0 }}
@@ -167,33 +226,34 @@ export default function Navbar() {
               className="fixed inset-0 bg-black z-40 md:hidden"
             ></motion.div>
 
-            {/* Drawer Panel */}
             <motion.div
               key="drawer"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="fixed top-0 right-0 h-full w-3/4 sm:w-2/3 bg-[#1c1c1c] border-l border-gray-700 shadow-xl z-50 flex flex-col p-6 space-y-6 md:hidden"
+              className="fixed top-0 right-0 h-full w-3/4 sm:w-2/3 bg-gray-100 dark:bg-[#1c1c1c] border-l border-gray-300 dark:border-gray-700 shadow-xl z-50 flex flex-col p-6 space-y-6 md:hidden transition-colors duration-300"
             >
               <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-semibold text-[#73ceff]">Menu</h2>
+                <h2 className="text-lg font-semibold text-[#1976d2] dark:text-[#73ceff]">
+                  Menu
+                </h2>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="text-gray-400 hover:text-[#73ceff] transition-colors"
+                  className="text-gray-500 dark:text-gray-400 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
               {/* Search */}
-              <div className="flex items-center bg-[#2a2a2a] rounded-md overflow-hidden">
+              <div className="flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden">
                 <input
                   type="text"
                   placeholder="Search products..."
-                  className="bg-transparent text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-400"
+                  className="bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"
                 />
-                <button className="px-3 py-2 text-gray-300 hover:text-[#73ceff] transition-colors">
+                <button className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
                   <SearchIcon className="w-5 h-5" />
                 </button>
               </div>
@@ -204,8 +264,8 @@ export default function Navbar() {
                   to="/"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#73ceff]" : ""
+                    `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                     }`
                   }
                 >
@@ -216,48 +276,34 @@ export default function Navbar() {
                   to="/products"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#73ceff]" : ""
+                    `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                     }`
                   }
                 >
                   Products
                 </NavLink>
 
-                {/* Cart (with badge) */}
                 <NavLink
                   to="/cart"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `relative flex items-center gap-1 hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#73ceff]" : ""
+                    `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                     }`
                   }
                 >
                   <ShoppingBasket className="w-5 h-5" />
                   <span>Cart</span>
-                  {itemCount > 0 && (
-                    <motion.span
-                      key="cart-badge-mobile"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: pulse ? [1, 1.3, 1] : 1 }}
-                      exit={{ scale: 0 }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
-                      className="absolute -top-2 -right-3 bg-[#1976d2] text-white text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
-                    >
-                      {itemCount}
-                    </motion.span>
-                  )}
                 </NavLink>
 
-                {/* Auth */}
                 {!user ? (
                   <NavLink
                     to="/login"
                     onClick={() => setMenuOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center gap-1 hover:text-[#73ceff] transition-colors ${
-                        isActive ? "text-[#73ceff]" : ""
+                      `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
+                        isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
                       }`
                     }
                   >
@@ -270,12 +316,17 @@ export default function Navbar() {
                       logout();
                       setMenuOpen(false);
                     }}
-                    className="flex items-center gap-1 hover:text-[#73ceff] transition-colors"
+                    className="flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
                   >
                     <UserRound className="w-5 h-5" />
                     <span>Logout</span>
                   </button>
                 )}
+
+                {/* Theme Toggle for mobile */}
+                <div className="pt-4 border-t border-gray-300 dark:border-gray-700">
+                  <ThemeToggleButton />
+                </div>
               </nav>
             </motion.div>
           </>
