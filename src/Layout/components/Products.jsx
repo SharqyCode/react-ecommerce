@@ -1,4 +1,3 @@
-// src/Layout/components/Products.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import "./Products.css";
@@ -9,14 +8,15 @@ const Products = ({ isHomePage = false }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
+  const [sortOrder, setSortOrder] = useState(""); 
 
   const category = searchParams.get("category");
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-
   const [minInput, setMinInput] = useState("");
   const [maxInput, setMaxInput] = useState("");
 
   const parseNumber = (value) => {
+    if (value === null || value === undefined) return null;
     const trimmed = String(value).trim();
     if (trimmed === "") return null;
     const n = Number(trimmed);
@@ -44,14 +44,7 @@ const Products = ({ isHomePage = false }) => {
   const min = parseNumber(minInput);
   const max = parseNumber(maxInput);
 
-  const minAvailablePrice = products.length
-    ? Math.min(...products.map((p) => Number(p.price) || 0))
-    : 0;
-
-  const effectiveMin =
-    min && min < minAvailablePrice ? minAvailablePrice : min;
-
-  const filteredProducts = products.filter((p) => {
+  let filteredProducts = products.filter((p) => {
     const name = p.name?.toLowerCase() || "";
     const categoryName =
       typeof p.category === "string"
@@ -62,13 +55,19 @@ const Products = ({ isHomePage = false }) => {
     const matchesCategory = category
       ? categoryName === category.toLowerCase()
       : true;
-
     const price = Number(p.price) || 0;
-    const matchesMin = effectiveMin !== null ? price >= effectiveMin : true;
+    const matchesMin = min !== null ? price >= min : true;
     const matchesMax = max !== null ? price <= max : true;
 
     return matchesSearch && matchesCategory && matchesMin && matchesMax;
   });
+
+  // 🆕 Apply sorting logic
+  if (sortOrder === "lowToHigh") {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === "highToLow") {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  }
 
   const productsToShow = isHomePage
     ? filteredProducts.slice(0, 4)
@@ -88,7 +87,7 @@ const Products = ({ isHomePage = false }) => {
   return (
     <section className="products-section">
       <aside className="filter-sidebar">
-        <h3>Filter by Price</h3>
+        <h3>Price</h3>
         <div className="price-filter">
           <div className="filter-input">
             <label>Min:</label>
@@ -100,6 +99,7 @@ const Products = ({ isHomePage = false }) => {
               onChange={(e) => setMinInput(e.target.value)}
             />
           </div>
+
           <div className="filter-input">
             <label>Max:</label>
             <input
@@ -110,15 +110,28 @@ const Products = ({ isHomePage = false }) => {
               onChange={(e) => setMaxInput(e.target.value)}
             />
           </div>
+
           <button
             className="clear-filters-btn"
             onClick={() => {
               setMinInput("");
               setMaxInput("");
+              setSortOrder(""); 
             }}
           >
-            Clear Filters
+            Clear
           </button>
+        </div>
+        <div className="sort-section">
+          <h3>Sort By</h3>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="">Default</option>
+            <option value="lowToHigh">Price: Low → High</option>
+            <option value="highToLow">Price: High → Low</option>
+          </select>
         </div>
       </aside>
 
@@ -134,10 +147,9 @@ const Products = ({ isHomePage = false }) => {
                 <Link to={`/products/${p._id || p.id}`} className="card-link">
                   <img
                     src={
-                      p.images && p.images.length
+                      p.images?.length
                         ? p.images[0]
-                        : p.thumbnail ||
-                          "https://placehold.co/300x300?text=No+Image"
+                        : p.thumbnail || "https://placehold.co/300x300?text=No+Image"
                     }
                     alt={p.name || "Product"}
                   />
@@ -150,6 +162,7 @@ const Products = ({ isHomePage = false }) => {
                       : ""}
                   </p>
                 </Link>
+
                 <p className="price">${p.price}</p>
                 <Link to={`/products/${p._id || p.id}`}>
                   <button className="add-cart-btn">View / Add to Cart</button>
@@ -157,12 +170,6 @@ const Products = ({ isHomePage = false }) => {
               </div>
             ))}
           </div>
-        )}
-
-        {isHomePage && (
-          <Link to="/products" className="view-all-btn">
-            View All Products
-          </Link>
         )}
       </div>
     </section>

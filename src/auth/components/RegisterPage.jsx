@@ -6,7 +6,8 @@ import {
   Card,
   Typography,
   CircularProgress,
-} from "@mui/material";
+} 
+from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {

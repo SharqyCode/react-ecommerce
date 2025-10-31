@@ -12,7 +12,6 @@ import slide6 from "../img/slide6.jpg";
 import slide7 from "../img/slide7.jpg";
 import slide8 from "../img/slide8.jpg";
 
-// Category images
 import electronicsImg from "../img/electronics.jpg";
 import appearelImg from "../img/appearel.jpg";
 import goodsImg from "../img/goods.jpg";
