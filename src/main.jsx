@@ -9,6 +9,7 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 
+
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -22,5 +23,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ThemeProvider>
       </CartProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

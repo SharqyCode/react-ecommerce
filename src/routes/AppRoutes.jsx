@@ -11,8 +11,8 @@ import RegisterPage from "../features/auth/components/RegisterPage";
 import LoginPage from "../features/auth/components/LoginPage";
 import ForgotPassword from "../features/auth/components/ForgotPassword";
 import ShopLayout from "../features/Shop/ShopLayout";
-import LandingPage from "../features/Shop/components/LandingPage";
-import Products from "../features/Shop/components/Products";
+// import LandingPage from "../features/Shop/components/LandingPage";
+// import Products from "../features/Shop/components/Products";
 import Cart from "../features/pages/Cart";
 import PaymentLayout from "../features/pages/Layout/paymentLayout";
 import Layout from "../Layout/Layout";
@@ -24,6 +24,10 @@ import PaySuccess from "../features/cart/PaySuccess";
 import PayCancel from "../features/cart/PayCancel";
 import { useThemeContext } from "../context/ThemeContext";
 import { useEffect } from "react";
+import LandingPage from "../Layout/components/LandingPage";
+import Products from "../Layout/components/Products";
+import ProductDetail from "../Layout/components/ProductDetail";
+
 
 export default function AppRoutes() {
   const { mode } = useThemeContext();
@@ -41,8 +45,27 @@ export default function AppRoutes() {
         <Route path="/" element={<ShopLayout />}>
           {/* <Route path="/shop" element={<Shop />} /> */}
           <Route index element={<LandingPage />} />
+<<<<<<< HEAD
           <Route path="products" element={<Products />} />
           <Route path="cart" element={<CartPage />} />
+=======
+          <Route path="/products" element={<Products />} />
+          <Route path="products/:id" element={<ProductDetail />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot" element={<ForgotPassword />} />
+        {/*
+        
+        <Route path="/" element={<categoryLayout />}>
+          <Route index element={<categoryMain />} />
+          <Route path="/Electronics" element={<Electronics />} />
+          <Route path="/aparal" element={<aparal />} />
+          .
+          .
+          .
+        </Route> 
+         */}
+>>>>>>> 0ff3763a391c8dbb371973a82fee81303e9382c2
         </Route>
         {/* Start Authentication Routes */}
         <Route element={<LoggedInGuard />}>

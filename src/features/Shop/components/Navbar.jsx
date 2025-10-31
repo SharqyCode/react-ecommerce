@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { SearchIcon, ShoppingBasket, UserRound, Menu, X } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
 import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
 
-export default function Navbar() {
+export default function Navbar({ onSearch }) {
   const { user, logout } = useAuth();
   const { products } = useCart();
   const navigate = useNavigate();
@@ -15,6 +15,14 @@ export default function Navbar() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [pulse, setPulse] = useState(false);
   const [showMiniCart, setShowMiniCart] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch(value);
+  };
 
   const itemCount =
     products?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
@@ -249,6 +257,8 @@ export default function Navbar() {
               {/* Search */}
               <div className="flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden">
                 <input
+                  value={searchTerm}
+                  onChange={handleSearch}
                   type="text"
                   placeholder="Search products..."
                   className="bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"

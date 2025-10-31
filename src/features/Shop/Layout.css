@@ -47,6 +47,7 @@ main {
   height: 70px;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0px 20px;
 }
 
 .nav-logo {
@@ -196,10 +197,6 @@ main {
   }
 
   /* Adjust main padding for new mobile header height */
-  main {
-    /* padding-top: 185px; */
-    /* Manually adjusted for new header + categories */
-  }
 }
 
 @media (max-width: 480px) {
