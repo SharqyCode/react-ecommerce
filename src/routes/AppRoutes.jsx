@@ -14,6 +14,8 @@ import Landing from "../Home/components/landing";
 import Layout from "../Layout/Layout";
 import LandingPage from "../Layout/components/LandingPage";
 import Products from "../Layout/components/Products";
+import ProductDetail from "../Layout/components/ProductDetail";
+
 
 export default function AppRoutes() {
   return (
@@ -28,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="/products" element={<Products />} />
+          <Route path="products/:id" element={<ProductDetail />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot" element={<ForgotPassword />} />

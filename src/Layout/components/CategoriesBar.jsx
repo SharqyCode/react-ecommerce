@@ -1,45 +1,40 @@
-import React from 'react';
-import './CategoriesBar.css';
-import { Link } from "react-router-dom";
-
+import React from "react";
+import "./CategoriesBar.css";
+import { Link, useSearchParams } from "react-router-dom";
 
 const CategoriesBar = () => {
+  const [searchParams] = useSearchParams();
+  const activeCategory = searchParams.get("category");
+
+  const categories = [
+    { label: "Electronics", value: "Electronics" },
+    { label: "Apparel", value: "Fashion" },
+    { label: "Home Goods", value: "Home & Kitchen" },
+    { label: "Books", value: "Books" },
+    { label: "Sports", value: "Sports & Outdoors" },
+    { label: "Beauty & Health", value: "Beauty & Health" },
+    { label: "Toys & Games", value: "Toys & Games" },
+    { label: "Automotive", value: "Automotive" },
+    { label: "Pet Supplies", value: "Pet Supplies" },
+    { label: "Groceries", value: "Groceries" },
+  ];
 
   return (
     <nav className="categories-bar">
       <ul>
-        <li>
-          <Link to="/products?category=electronics">Electronics</Link>
-        </li>
-        <li>
-          <button type="button" className="category-action-btn">
-            Apparel
-          </button>
-        </li>
-        <li>
-          <button type="button" className="category-action-btn">
-            Home Goods
-          </button>
-        </li>
-        <li>
-          <button type="button" className="category-action-btn">
-            Books
-          </button>
-        </li>
-        <li>
-          <button type="button" className="category-action-btn">
-            Sports
-          </button>
-        </li>
-        <li>
-          <button type="button" className="category-action-btn">
-            Sale
-          </button>
-        </li>
+        {categories.map((cat) => (
+          <li key={cat.value}>
+            <Link
+              to={`/products?category=${encodeURIComponent(cat.value)}`}
+              className={activeCategory === cat.value ? "active" : ""}
+            >
+              {cat.label}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
 };
 
 export default CategoriesBar;
-

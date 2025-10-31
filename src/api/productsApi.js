@@ -1,40 +1,65 @@
-import axios from "axios"
+import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/products"
-
+const BASE_URL = "http://localhost:5000/api/products";
 
 export const getAllProducts = async () => {
-    const pew = (await (axios.get(BASE_URL))).data;
-    console.log(pew);
-    return pew
-}
+  try {
+    const { data } = await axios.get(BASE_URL);
+    console.log("All Products:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching all products:", error);
+    throw error;
+  }
+};
 
 export const getProductsByCategory = async (category) => {
-  const { data } = await axios.get(`${BASE_URL}?category=${category}`);
-  return data;
+  try {
+    const { data } = await axios.get(`${BASE_URL}?category=${category}`);
+    console.log(`Products in category "${category}":`, data);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching products for category "${category}":`, error);
+    throw error;
+  }
+};
+
+export const getProductById = async (productId) => {
+    const { data } = await axios.get(`${BASE_URL}/${productId}`);
+    return data;
 };
 
 
-export const getProdctById = async (productId) => {
-    const pew = (await (axios.get(`${BASE_URL}/${productId}`))).data
-    console.log(pew);
-    return pew
-}
-
 export const addProduct = async (product) => {
-    const pew = (await (axios.post(BASE_URL, product))).data
-    console.log(pew);
-    return pew
-}
+  try {
+    const { data } = await axios.post(BASE_URL, product);
+    console.log("Added Product:", data);
+    return data;
+  } catch (error) {
+    console.error("Error adding product:", error);
+    throw error;
+  }
+};
 
 export const updateProduct = async (productId, product) => {
-    const pew = (await (axios.put(`${BASE_URL}/${productId}`, product))).data
-    console.log("update:", pew);
-    return pew
-}
+  try {
+    const { data } = await axios.put(`${BASE_URL}/${productId}`, product);
+    console.log("Updated Product:", data);
+    return data;
+  } catch (error) {
+    console.error("Error updating product:", error);
+    throw error;
+  }
+};
+
 
 export const deleteProductById = async (productId) => {
-    const pew = (await (axios.delete(`${BASE_URL}/${productId}`))).data
-    console.log(pew);
-    return pew
-}
+  try {
+    const { data } = await axios.delete(`${BASE_URL}/${productId}`);
+    console.log("Deleted Product:", data);
+    return data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+};
