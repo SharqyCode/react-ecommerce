@@ -69,6 +69,9 @@ export default function ProductForm() {
                 <TextField
                   key={field}
                   value={formData[field]}
+                  sx={{
+                    color: "black",
+                  }}
                   onChange={(e) => {
                     setFormData({ ...formData, [field]: e.target.value });
                   }}
