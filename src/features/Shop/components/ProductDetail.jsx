@@ -22,6 +22,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [tab, setTab] = useState("description");
   const [selectedSize, setSelectedSize] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   const { addProduct } = useCart();
 
@@ -170,7 +171,10 @@ const ProductDetails = () => {
           <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
             <TextField
               type="number"
-              defaultValue={1}
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
               size="small"
               sx={{
                 width: 70,
@@ -181,7 +185,13 @@ const ProductDetails = () => {
               }}
             />
             <Button
-              onClick={() => addProduct(product)}
+              onClick={() => {
+                console.log(product);
+                addProduct({
+                  ...product,
+                  quantity,
+                });
+              }}
               variant="contained"
               sx={{
                 backgroundColor: mode === "dark" ? "#73ceff" : "#1976d2",

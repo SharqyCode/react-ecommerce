@@ -48,20 +48,6 @@ export default function AppRoutes() {
           <Route path="cart" element={<CartPage />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot" element={<ForgotPassword />} />
-          {/*
-        
-        <Route path="/" element={<categoryLayout />}>
-          <Route index element={<categoryMain />} />
-          <Route path="/Electronics" element={<Electronics />} />
-          <Route path="/aparal" element={<aparal />} />
-          .
-          .
-          .
-        </Route> 
-         */}
         </Route>
         {/* Start Authentication Routes */}
         <Route element={<LoggedInGuard />}>

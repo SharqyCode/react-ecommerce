@@ -147,7 +147,7 @@ export default function Navbar({ onSearch }) {
                               {item.name}
                             </p>
                             <p className="text-gray-600 dark:text-gray-400">
-                              {item.quantity} × ${item.price.toFixed(2)}
+                              {item.quantity} × ${item.price?.toFixed(2)}
                             </p>
                           </div>
                         </div>
