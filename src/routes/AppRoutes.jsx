@@ -11,11 +11,11 @@ import RegisterPage from "../features/auth/components/RegisterPage";
 import LoginPage from "../features/auth/components/LoginPage";
 import ForgotPassword from "../features/auth/components/ForgotPassword";
 import ShopLayout from "../features/Shop/ShopLayout";
-// import LandingPage from "../features/Shop/components/LandingPage";
+import LandingPage from "../features/Shop/components/LandingPage";
 // import Products from "../features/Shop/components/Products";
 import Cart from "../features/pages/Cart";
 import PaymentLayout from "../features/pages/Layout/paymentLayout";
-import Layout from "../Layout/Layout";
+
 import { RoleGuard } from "./protection/RoleGuard";
 import Unauthorized from "../pages/Unauthorized";
 import LoggedInGuard from "./protection/LoggedInGuard";
@@ -24,9 +24,9 @@ import PaySuccess from "../features/cart/PaySuccess";
 import PayCancel from "../features/cart/PayCancel";
 import { useThemeContext } from "../context/ThemeContext";
 import { useEffect } from "react";
-import LandingPage from "../Layout/components/LandingPage";
-import Products from "../Layout/components/Products";
-import ProductDetail from "../Layout/components/ProductDetail";
+// import LandingPage from "../Layout/components/LandingPage";
+import Products from "../features/Shop/components/Products";
+import ProductDetail from "../features/Shop/components/ProductDetail";
 
 export default function AppRoutes() {
   const { mode } = useThemeContext();
@@ -47,7 +47,7 @@ export default function AppRoutes() {
           <Route path="products" element={<Products />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="/products" element={<Products />} />
-          <Route path="products/:id" element={<ProductDetail />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot" element={<ForgotPassword />} />

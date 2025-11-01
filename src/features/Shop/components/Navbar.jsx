@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SearchIcon, ShoppingBasket, UserRound, Menu, X } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
 import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";

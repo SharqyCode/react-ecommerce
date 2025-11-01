@@ -1,40 +1,23 @@
+import { Alert, Snackbar } from "@mui/material";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 export const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
-  const defaultProducts = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: 50,
-      quantity: 2,
-      thumbnail: "/photo-1523275335684-37898b6baf30.avif",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 100,
-      quantity: 1,
-      thumbnail: "/photo-1505740420928-5e560c06d30e.avif",
-    },
-    { id: 3, name: "Product 3", price: 75, quantity: 3, thumbnail: "bag.avif" },
-    {
-      id: 4,
-      name: "Product 4",
-      price: 25,
-      quantity: 3,
-      thumbnail: "coach.avif",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      price: 45,
-      quantity: 2,
-      thumbnail: "watch.avif",
-    },
-  ];
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const showSnackbar = (message, severity = "info") => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   const [products, setProducts] = useState(() => {
     const storedCart = localStorage.getItem("cart");
@@ -48,13 +31,21 @@ export const CartProvider = ({ children }) => {
         console.error("Error parsing cart from Local Storage:", error);
       }
     }
-    return defaultProducts;
+    return [];
   });
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(products));
   }, [products]);
 
+  const addProduct = (product) => {
+    if (!products.includes(product)) {
+      setProducts((prev) => [...prev, product]);
+      showSnackbar("Added to Cart", "success");
+    } else {
+      showSnackbar("Already in cart", "error");
+    }
+  };
   const removeProduct = (id) => {
     setProducts((prev) => prev.filter((item) => item.id !== id));
   };
@@ -90,6 +81,7 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         products,
+        addProduct,
         removeProduct,
         increaseQuantity,
         decreaseQuantity,
@@ -98,6 +90,21 @@ export const CartProvider = ({ children }) => {
       }}
     >
       {children}
+      {/* Global Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          variant="filled"
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </CartContext.Provider>
   );
 };

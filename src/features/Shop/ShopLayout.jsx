@@ -4,7 +4,6 @@ import LandingPage from "./components/LandingPage";
 import Products from "./components/Products";
 import CategoriesBar from "./components/CategoriesBar";
 import Footer from "./components/Footer"; // Import the new Footer
-import "./Layout.css";
 import { Snackbar } from "@mui/material";
 import Navbar from "./components/Navbar";
 import { useThemeContext } from "../../context/ThemeContext";
@@ -51,12 +50,8 @@ const ProfileIcon = () => (
 // --- End of new icon ---
 
 function ShopLayout() {
-  const { user } = useAuth();
-
-  const { mode } = useThemeContext();
-  console.log(mode);
   return (
-    <div className={`${mode}`}>
+    <div>
       <Navbar />
       <CategoriesBar />
       <main>
