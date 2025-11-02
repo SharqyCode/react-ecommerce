@@ -16,7 +16,7 @@ import { getProductById } from "../../../api/productsApi";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useCart } from "../../../context/CartContext";
 
-const ProductDetails = () => {
+const ProductDetail = () => {
   const { id } = useParams();
   const { mode } = useThemeContext(); // 👈 detect light/dark
   const [product, setProduct] = useState(null);
@@ -286,4 +286,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetail;

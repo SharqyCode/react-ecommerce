@@ -8,7 +8,7 @@ import App from "./App.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
-
+import { SearchProvider } from "./context/SearchContext.jsx";
 
 const queryClient = new QueryClient();
 
@@ -18,10 +18,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <CartProvider>
         <ThemeProvider>
           <AuthProvider>
-            <AppRoutes />
+            <SearchProvider>
+              <AppRoutes />
+            </SearchProvider>
           </AuthProvider>
         </ThemeProvider>
       </CartProvider>
     </QueryClientProvider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );

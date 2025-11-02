@@ -7,6 +7,7 @@ import {
   Typography,
   Card,
   CardContent,
+  useTheme, // Import useTheme hook to access theme colors
 } from "@mui/material";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ export default function ForgotPassword() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme(); // Hook to access the current light/dark theme settings
 
   const handleReset = () => {
     if (!email) {
@@ -28,94 +30,101 @@ export default function ForgotPassword() {
       return;
     }
 
+    // In a real application, you would call your authentication service here
     setError("");
-    setMessage(" reset link has been sent to your email!");
+    setMessage("Reset link has been sent to your email!");
   };
 
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #1976d2, #42a5f5)",
-      }}
-    >
-      <Container maxWidth="sm">
-        <Card
-          sx={{
-            p: 4,
-            width: "100%",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
-            borderRadius: 4,
-            backgroundColor: "#fff",
-          }}
-        >
-          <CardContent>
+    <Container maxWidth="sm">
+      <Card
+        sx={{
+          p: 4,
+          width: "100%",
+          // 💡 Theme Adaptation: Use theme shadow and paper background
+          boxShadow: theme.shadows[10],
+          borderRadius: 4,
+          backgroundColor: "background.paper", // Will be white in light mode, dark gray in dark mode
+        }}
+      >
+        <CardContent>
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
+              fontWeight: "bold",
+              mb: 3,
+              // 💡 Theme Adaptation: Use the primary color for branding/title
+              color: "primary.main",
+            }}
+          >
+            Forgot Password
+          </Typography>
+
+          <TextField
+            fullWidth
+            label="Email Address"
+            variant="outlined"
+            margin="normal"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+              setMessage("");
+            }}
+            error={!!error}
+            helperText={error}
+          />
+
+          {message && (
             <Typography
-              variant="h4"
               align="center"
-              sx={{ fontWeight: "bold", mb: 3, color: "#1976d2" }}
-            >
-              Forgot Password
-            </Typography>
-
-            <TextField
-              fullWidth
-              label="Email Address"
-              variant="outlined"
-              margin="normal"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError("");
-                setMessage("");
-              }}
-              error={!!error}
-              helperText={error}
-            />
-
-            {message && (
-              <Typography
-                align="center"
-                sx={{
-                  mt: 2,
-                  color: "green",
-                  fontWeight: "bold",
-                }}
-              >
-                {message}
-              </Typography>
-            )}
-
-            <Button
-              fullWidth
-              variant="contained"
               sx={{
-                mt: 3,
-                py: 1.3,
-                fontSize: "1rem",
+                mt: 2,
+                // 💡 Theme Adaptation: Use the success palette color
+                color: theme.palette.success.main,
                 fontWeight: "bold",
-                backgroundColor: "#1976d2",
-                "&:hover": { backgroundColor: "#115293" },
               }}
-              onClick={handleReset}
-              startIcon={<LockResetIcon />}
             >
-              Reset Password
-            </Button>
-
-            <Typography
-              align="center"
-              sx={{ mt: 3, color: "#1976d2", cursor: "pointer" }}
-              onClick={() => navigate("/")}
-            >
-              Back to Login
+              {message}
             </Typography>
-          </CardContent>
-        </Card>
-      </Container>
-    </Box>
+          )}
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              py: 1.3,
+              fontSize: "1rem",
+              fontWeight: "bold",
+              // 💡 Theme Adaptation: Use primary color for the button
+              backgroundColor: "primary.main",
+              "&:hover": {
+                // 💡 Theme Adaptation: Use primary dark for consistent hover effect
+                backgroundColor: "primary.dark",
+              },
+            }}
+            onClick={handleReset}
+            startIcon={<LockResetIcon />}
+          >
+            Reset Password
+          </Button>
+
+          <Typography
+            align="center"
+            sx={{
+              mt: 3,
+              // 💡 Theme Adaptation: Use primary color for the clickable link
+              color: "primary.main",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/auth/login")}
+          >
+            Back to Login
+          </Typography>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }

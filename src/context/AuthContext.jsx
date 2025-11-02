@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 import { Snackbar, Alert } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { getUserById } from "../api/usersApi";
@@ -22,9 +21,12 @@ export const AuthProvider = ({ children }) => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const login = (userData) => {
+  const login = (userData, signup = false) => {
     setUser(userData);
-    showSnackbar("Welcome Back, Soldier!", "success");
+    // User is already registered
+    if (!signup) showSnackbar("Welcome Back, Soldier!", "success");
+    // User is a first-timer
+    else showSnackbar("Welcome Aboard, Soldier!", "success");
   };
 
   const logout = () => {
@@ -41,18 +43,8 @@ export const AuthProvider = ({ children }) => {
         setUser(data);
         console.log(`context setUser`, data);
       });
-      //   setLoading(false);
-      //   return;
     }
-
-    // axios
-    //   .get("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-    //   .then((res) => setUser(res.data.user))
-    //   .catch(() => logout())
-    //   .finally(() => setLoading(false));
   }, []);
-
-  //   if (loading) return <p>Loading...</p>;
 
   return (
     <AuthContext.Provider value={{ user, login, logout, showSnackbar }}>

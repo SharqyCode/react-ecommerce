@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -18,6 +18,7 @@ import { jwtDecode } from "jwt-decode";
 import { getUserById } from "../../../api/usersApi";
 import CardHeader from "./CardHeader";
 import { useAuth } from "../../../context/AuthContext";
+import { useThemeContext } from "../../../context/ThemeContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -26,8 +27,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
+  const { setMode } = useThemeContext();
   const { login } = useAuth();
-  // const context = useOutletContext();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -62,9 +63,11 @@ export default function LoginPage() {
         console.log(decodedToken);
         const user = await getUserById(decodedToken.id);
         console.log("login: ", user);
-        login(user);
-        if (user.role === "admin") navigate("/admin");
-        else navigate("/");
+        login(user, false);
+        if (user.role === "admin") {
+          setMode("light");
+          navigate("/admin");
+        } else navigate("/");
       } else {
         setError(data.message || "Login failed");
       }
@@ -76,134 +79,121 @@ export default function LoginPage() {
   };
 
   return (
-    <Box
+    <Card
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "text.primary",
+        width: 400,
+        p: 4,
+        borderRadius: 4,
+        bgcolor: "background.paper",
+        boxShadow: 4,
         transition: "all 0.3s ease",
       }}
     >
-      <CardHeader />
-      <Card
-        sx={{
-          width: 400,
-          p: 4,
-          borderRadius: 4,
-          bgcolor: "background.paper",
-          boxShadow: 4,
-          transition: "all 0.3s ease",
-        }}
-      >
-        <CardContent>
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            sx={{
-              fontWeight: "bold",
-              color: theme.palette.primary.main,
-              letterSpacing: 1,
-              mb: 4,
-            }}
-          >
-            Login
-          </Typography>
+      <CardContent>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{
+            fontWeight: "bold",
+            color: theme.palette.primary.main,
+            letterSpacing: 1,
+            mb: 4,
+          }}
+        >
+          Login
+        </Typography>
 
-          <form onSubmit={handleLogin}>
-            <Stack spacing={2}>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{
-                  "& .MuiOutlinedInput-root": { borderRadius: 3 },
-                }}
-              />
+        <form onSubmit={handleLogin}>
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: 3 },
+              }}
+            />
 
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{
-                  "& .MuiOutlinedInput-root": { borderRadius: 3 },
-                }}
-              />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: 3 },
+              }}
+            />
 
-              {error && (
-                <Typography color="error" sx={{ textAlign: "center" }}>
-                  {error}
-                </Typography>
+            {error && (
+              <Typography color="error" sx={{ textAlign: "center" }}>
+                {error}
+              </Typography>
+            )}
+
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                mt: 1,
+                py: 1.2,
+                fontSize: "1rem",
+                fontWeight: "bold",
+                borderRadius: "10px",
+                backgroundColor: theme.palette.primary.main,
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Login"
               )}
+            </Button>
 
-              <Button
-                type="submit"
-                fullWidth
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                mt: 1,
+              }}
+            >
+              <Link
+                underline="hover"
                 sx={{
-                  mt: 1,
-                  py: 1.2,
-                  fontSize: "1rem",
+                  fontSize: 16,
+                  color: "text.secondary",
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate("/auth/forgot")}
+              >
+                Forget password?
+              </Link>
+
+              <Link
+                underline="hover"
+                sx={{
+                  fontSize: 14,
+                  color: theme.palette.primary.main,
                   fontWeight: "bold",
-                  borderRadius: "10px",
-                  backgroundColor: theme.palette.primary.main,
-                  color: "#fff",
-                  "&:hover": {
-                    backgroundColor: theme.palette.primary.dark,
-                  },
+                  cursor: "pointer",
                 }}
-                disabled={loading}
+                onClick={() => navigate("/auth/register")}
               >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  "Login"
-                )}
-              </Button>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mt: 1,
-                }}
-              >
-                <Link
-                  underline="hover"
-                  sx={{
-                    fontSize: 16,
-                    color: "text.secondary",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate("/auth/forgot")}
-                >
-                  Forget password?
-                </Link>
-
-                <Link
-                  underline="hover"
-                  sx={{
-                    fontSize: 14,
-                    color: theme.palette.primary.main,
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate("/auth/register")}
-                >
-                  Register
-                </Link>
-              </Box>
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
-    </Box>
+                Register
+              </Link>
+            </Box>
+          </Stack>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

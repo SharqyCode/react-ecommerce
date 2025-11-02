@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
 import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
-
+import { useSearch } from "../../../context/SearchContext";
 export default function Navbar({ onSearch }) {
   const { user, logout } = useAuth();
   const { products } = useCart();
@@ -15,13 +15,10 @@ export default function Navbar({ onSearch }) {
   const [searchFocused, setSearchFocused] = useState(false);
   const [pulse, setPulse] = useState(false);
   const [showMiniCart, setShowMiniCart] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+  const { setSearchQuery } = useSearch();
+  const handleSearchSubmit = (searchTerm) => {
+    setSearchQuery(searchTerm);
   };
 
   const itemCount =
@@ -52,6 +49,7 @@ export default function Navbar({ onSearch }) {
         </Link>
 
         {/* Search Bar */}
+
         <motion.div
           className="hidden md:flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden"
           animate={{
@@ -60,13 +58,28 @@ export default function Navbar({ onSearch }) {
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           <input
+            onKeyDown={(e) => {
+              searchTerm && e.key === "Enter"
+                ? handleSearchSubmit(searchTerm)
+                : "";
+            }}
             type="text"
             placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+            }}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
             className="bg-transparent text-sm text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"
           />
-          <button className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors duration-200">
+          <button
+            onClick={() => {
+              handleSearchSubmit(searchTerm);
+            }}
+            type="submit"
+            className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors duration-200"
+          >
             <SearchIcon className="w-5 h-5" />
           </button>
         </motion.div>
@@ -184,7 +197,7 @@ export default function Navbar({ onSearch }) {
           <li>
             {!user ? (
               <NavLink
-                to="/login"
+                to="/auth/login"
                 className={({ isActive }) =>
                   `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
                     isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
@@ -309,7 +322,7 @@ export default function Navbar({ onSearch }) {
 
                 {!user ? (
                   <NavLink
-                    to="/login"
+                    to="/auth/login"
                     onClick={() => setMenuOpen(false)}
                     className={({ isActive }) =>
                       `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${

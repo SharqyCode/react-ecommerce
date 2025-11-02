@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import {
-  getAllProducts,
-  getProductsByCategory,
-} from "../../../api/productsApi";
+// 1. Import useQuery from TanStack Query
+import { useQuery } from "@tanstack/react-query";
+import { getAllProducts } from "../../../api/productsApi";
+import ProductCard from "./ProductCard";
+import { useSearch } from "../../../context/SearchContext";
+
+// Key for TanStack Query caching
+const ALL_PRODUCTS_QUERY_KEY = "allProducts";
 
 const Products = ({ isHomePage = false }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Use useQuery for data fetching and state management
   const [searchParams] = useSearchParams();
   const [sortOrder, setSortOrder] = useState("");
   const [minInput, setMinInput] = useState("");
   const [maxInput, setMaxInput] = useState("");
+  const { searchQuery } = useSearch();
 
+  // Get the current category from the URL
   const category = searchParams.get("category");
-  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   const parseNumber = (value) => {
     if (value === null || value === undefined) return null;
@@ -25,54 +28,75 @@ const Products = ({ isHomePage = false }) => {
     return Number.isFinite(n) ? n : null;
   };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        let data = category
-          ? await getProductsByCategory(category)
-          : await getAllProducts();
-        setProducts(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [category]);
-
-  const min = parseNumber(minInput);
-  const max = parseNumber(maxInput);
-
-  let filteredProducts = products.filter((p) => {
-    const name = p.name?.toLowerCase() || "";
-    const categoryName =
-      typeof p.category === "string"
-        ? p.category.toLowerCase()
-        : p.category?.name?.toLowerCase() || "";
-
-    const matchesSearch = name.includes(searchQuery);
-    const matchesCategory = category
-      ? categoryName === category.toLowerCase()
-      : true;
-    const price = Number(p.price) || 0;
-    const matchesMin = min !== null ? price >= min : true;
-    const matchesMax = max !== null ? price <= max : true;
-
-    return matchesSearch && matchesCategory && matchesMin && matchesMax;
+  // --- 1. Data Fetching with useQuery ---
+  // Fetches ALL products once (or according to cache settings)
+  const {
+    data: allProducts,
+    isLoading, // Replaces local 'loading' state
+    error, // Replaces local 'error' state
+  } = useQuery({
+    queryKey: [ALL_PRODUCTS_QUERY_KEY],
+    queryFn: getAllProducts, // Assumes this fetches the complete list
+    // Optional: Keep data in cache for a long time since we filter locally
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  if (sortOrder === "lowToHigh") {
-    filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (sortOrder === "highToLow") {
-    filteredProducts.sort((a, b) => b.price - a.price);
-  }
+  // --- 2. Combined Filtering, Searching, and Sorting Logic (Memoized for performance) ---
+  const filteredAndSortedProducts = useMemo(() => {
+    if (!allProducts) return [];
+
+    // Start with all fetched products
+    let currentProducts = allProducts;
+
+    // 2a. Apply Category Filter (from URL)
+    if (category) {
+      currentProducts = currentProducts.filter(
+        // Ensure you access the category correctly, e.g., product.category.name
+        (product) => product.category?.name === category
+      );
+    }
+
+    // 2b. Apply Search Query Filter (from SearchContext)
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      currentProducts = currentProducts.filter(
+        (product) =>
+          product.name?.toLowerCase().includes(query) ||
+          product.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // 2c. Apply Price Range Filter (from local state inputs)
+    const min = parseNumber(minInput);
+    const max = parseNumber(maxInput);
+
+    if (min !== null || max !== null) {
+      currentProducts = currentProducts.filter((product) => {
+        const price = Number(product.price) || 0;
+        const matchesMin = min !== null ? price >= min : true;
+        const matchesMax = max !== null ? price <= max : true;
+        return matchesMin && matchesMax;
+      });
+    }
+
+    // 2d. Apply Sorting
+    if (sortOrder) {
+      // Create a shallow copy to prevent modifying the original array from the cache
+      const sorted = [...currentProducts];
+      if (sortOrder === "lowToHigh") {
+        sorted.sort((a, b) => a.price - b.price);
+      } else if (sortOrder === "highToLow") {
+        sorted.sort((a, b) => b.price - a.price);
+      }
+      return sorted;
+    }
+
+    return currentProducts;
+  }, [allProducts, category, searchQuery, minInput, maxInput, sortOrder]);
 
   const productsToShow = isHomePage
-    ? filteredProducts.slice(0, 4)
-    : filteredProducts;
+    ? filteredAndSortedProducts.slice(0, 4)
+    : filteredAndSortedProducts;
 
   const title = isHomePage
     ? "Featured Products"
@@ -82,22 +106,22 @@ const Products = ({ isHomePage = false }) => {
     ? `Search results for "${searchQuery}"`
     : "All Products";
 
-  if (loading)
-    return (
-      <div className="py-20 text-center text-gray-700 dark:text-gray-300">
-        Loading products...
-      </div>
-    );
+  // --- 3. Render States ---
+
   if (error)
     return (
       <div className="py-20 text-center text-red-500 dark:text-red-400">
-        {error}
+        Failed to load products.
       </div>
     );
 
   return (
-    <section className="flex flex-col md:flex-row max-w-7xl mx-auto mt-4 p-6 gap-10 bg-gray-50 dark:bg-[#121212] transition-colors duration-300">
-      {/* --- Filter Sidebar --- */}
+    <section
+      className={`${
+        isHomePage ? " overflow-x-auto " : ""
+      }flex flex-col md:flex-row max-w-7xl mx-auto mt-4 p-6 gap-10 bg-gray-50 dark:bg-[#121212] transition-colors duration-300`}
+    >
+      {/* --- Filter Sidebar (Price/Sort UI) --- */}
       {!isHomePage && (
         <aside className="md:w-1/4 w-full bg-white dark:bg-[#1e1e1e] p-5 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 h-fit transition-colors duration-300">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
@@ -168,58 +192,18 @@ const Products = ({ isHomePage = false }) => {
           {title}
         </h2>
 
-        {filteredProducts.length === 0 ? (
+        {productsToShow.length === 0 ? (
           <p className="text-gray-600 dark:text-gray-400">
             No products found matching your filters.
           </p>
         ) : (
           <div
-            className={`grid gap-8 ${
-              isHomePage
-                ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
-                : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            className={`flex gap-4  ${
+              isHomePage ? " overflow-x-scroll " : "flex-wrap"
             }`}
           >
             {productsToShow.map((p) => (
-              <div
-                key={p._id || p.id}
-                className="bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-              >
-                <Link to={`/products/${p._id || p.id}`} className="block">
-                  <img
-                    src={
-                      p.images?.length
-                        ? p.images[0]
-                        : p.thumbnail ||
-                          "https://placehold.co/300x300?text=No+Image"
-                    }
-                    alt={p.name || "Product"}
-                    className="w-full h-60 object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </Link>
-
-                <div className="p-4 text-center">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                    {p.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                    {p.description
-                      ? p.description.length > 80
-                        ? `${p.description.slice(0, 80)}...`
-                        : p.description
-                      : ""}
-                  </p>
-                  <p className="text-[#1976d2] dark:text-[#73ceff] font-semibold text-lg mb-3">
-                    ${p.price}
-                  </p>
-                  <Link
-                    to={`/products/${p._id || p.id}`}
-                    className="inline-block bg-[#1976d2] hover:bg-[#73ceff] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300"
-                  >
-                    View / Add to Cart
-                  </Link>
-                </div>
-              </div>
+              <ProductCard isHomePage={isHomePage} key={p.id} product={p} />
             ))}
           </div>
         )}

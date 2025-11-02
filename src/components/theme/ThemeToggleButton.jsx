@@ -1,12 +1,14 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useThemeContext } from "../../context/ThemeContext";
 
 export default function ThemeToggleButton() {
   const { mode, toggleTheme } = useThemeContext();
 
   return (
-    <Button
+    <IconButton
       onClick={toggleTheme}
       variant={mode === "light" ? "contained" : "outlined"}
       sx={{
@@ -15,7 +17,7 @@ export default function ThemeToggleButton() {
         borderRadius: 100,
       }}
     >
-      {mode === "light" ? "☀️" : "🌙"}
-    </Button>
+      {mode === "light" ? <LightModeIcon /> : <DarkModeIcon />}
+    </IconButton>
   );
 }

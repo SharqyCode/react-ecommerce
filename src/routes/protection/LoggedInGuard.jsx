@@ -2,7 +2,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const LoggedInGuard = ({ children }) => {
+const LoggedInGuard = () => {
   const { user } = useAuth();
 
   if (user) {

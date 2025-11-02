@@ -17,12 +17,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useCart } from "../../context/CartContext";
-import { useThemeContext } from "../../context/ThemeContext";
+import { useCart } from "../../../context/CartContext";
+import { useThemeContext } from "../../../context/ThemeContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const CartPage = () => {
   const { products, removeProduct, increaseQuantity, decreaseQuantity, total } =
     useCart();
+  const { user } = useAuth();
 
   const { mode } = useThemeContext();
   const theme = useTheme();
@@ -197,6 +199,7 @@ const CartPage = () => {
           </Typography>
           <Button
             onClick={makePayment}
+            disabled={products.length <= 0 || user == null}
             variant="contained"
             sx={{
               background: theme.palette.primary.main,
@@ -208,6 +211,11 @@ const CartPage = () => {
             Checkout
           </Button>
         </Box>
+        {!user && (
+          <p className="text-xs text-red-600 text-end mt-4">
+            Please login to checkout
+          </p>
+        )}
       </CardContent>
     </Card>
   );

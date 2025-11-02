@@ -72,7 +72,7 @@ const LandingPage = () => {
         </div>
 
         {/* Slider Dots */}
-        <div className="absolute bottom-5 w-full flex justify-center space-x-2">
+        <div className="absolute bottom-5 w-full flex justify-center space-x-2 z-20">
           {slides.map((_, index) => (
             <span
               key={index}

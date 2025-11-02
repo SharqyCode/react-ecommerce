@@ -28,20 +28,20 @@ export const ThemeProvider = ({ children }) => {
           mode,
           ...(mode === "light"
             ? {
-              background: { default: "#f5f5f5" },
-              text: { primary: "#000000" },
-            }
+                background: { default: "#f5f5f5" },
+                text: { primary: "#000000" },
+              }
             : {
-              background: { default: "#121212" },
-              text: { primary: "#ffffff" },
-            }),
+                background: { default: "#121212" },
+                text: { primary: "#ffffff" },
+              }),
         },
       }),
     [mode]
   );
 
   return (
-    <ThemeContext.Provider value={{ mode, toggleTheme }}>
+    <ThemeContext.Provider value={{ mode, toggleTheme, setMode }}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         {children}

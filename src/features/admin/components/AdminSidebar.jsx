@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu, FiUsers, FiBox, FiShoppingBag } from "react-icons/fi";
+import { Button } from "@mui/material";
+import { useAuth } from "../../../context/AuthContext";
+import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
 
 export default function AdminSidebar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { logout } = useAuth();
   return (
     <>
       {isOpen && (
@@ -63,6 +66,17 @@ export default function AdminSidebar() {
             {isOpen && <span>Orders</span>}
           </Link>
         </nav>
+        {isOpen && (
+          <div>
+            <Button
+              variant="text"
+              sx={{ position: "absolute", bottom: "10px", color: "#333" }}
+              onClick={logout}
+            >
+              Logout
+            </Button>
+          </div>
+        )}
       </aside>
     </>
   );
