@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Products from "./Products";
 
+// Slider images
 import slide1 from "../img/slide1.jpg";
 import slide2 from "../img/slide2.jpg";
 import slide3 from "../img/slide3.jpg";
@@ -11,9 +12,11 @@ import slide6 from "../img/slide6.jpg";
 import slide7 from "../img/slide7.jpg";
 import slide8 from "../img/slide8.jpg";
 
+// Category images
 import electronicsImg from "../img/electronics.jpg";
-import appearelImg from "../img/appearel.jpg";
-import goodsImg from "../img/goods.jpg";
+import fashionImg from "../img/fashion.jpg";
+import homeKitchenImg from "../img/home-kitchen.jpg";
+
 
 const LandingPage = () => {
   const slides = [
@@ -39,7 +42,6 @@ const LandingPage = () => {
     <>
       {/* Hero Section with Slider */}
       <section className="relative w-full h-[80vh] overflow-hidden">
-        {/* Slides */}
         {slides.map((img, index) => (
           <div
             key={index}
@@ -55,7 +57,6 @@ const LandingPage = () => {
           </div>
         ))}
 
-        {/* Overlay Content */}
         <div className="absolute z-20 inset-0 bg-black/40 flex flex-col justify-center items-center text-center text-white px-4">
           <h1 className="text-4xl md:text-6xl font-bold mb-3">
             Welcome to ShopEase
@@ -92,8 +93,13 @@ const LandingPage = () => {
         <h2 className="text-3xl font-bold mb-10 text-gray-800">
           Shop by Category
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
+          {/* Electronics */}
+          <Link
+            to="/products?category=Electronics"
+            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer block"
+          >
             <img
               src={electronicsImg}
               alt="Electronics"
@@ -102,29 +108,35 @@ const LandingPage = () => {
             <h3 className="text-xl font-semibold py-4 text-gray-700">
               Electronics
             </h3>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
+          {/* Fashion */}
+          <Link
+            to="/products?category=Fashion"
+            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer block"
+          >
             <img
-              src={appearelImg}
-              alt="Apparel"
+              src={fashionImg}
+              alt="Fashion"
+              className="w-full h-56 object-cover"
+            />
+            <h3 className="text-xl font-semibold py-4 text-gray-700">Fashion</h3>
+          </Link>
+
+          {/* Home & Kitchen */}
+          <Link
+            to="/products?category=Home%20%26%20Kitchen"
+            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer block"
+          >
+            <img
+              src={homeKitchenImg}
+              alt="Home & Kitchen"
               className="w-full h-56 object-cover"
             />
             <h3 className="text-xl font-semibold py-4 text-gray-700">
-              Apparel
+              Home & Kitchen
             </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
-            <img
-              src={goodsImg}
-              alt="Home Goods"
-              className="w-full h-56 object-cover"
-            />
-            <h3 className="text-xl font-semibold py-4 text-gray-700">
-              Home Goods
-            </h3>
-          </div>
+          </Link>
         </div>
       </section>
 
