@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Rating, TextField, Button, Box, Typography } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addReview } from "../../../../api/reviewsApi";
+import { useAuth } from "../../../../context/AuthContext";
 
-const ReviewForm = ({ user, product }) => {
+const ReviewForm = ({ product }) => {
+  const { user } = useAuth();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const userData = user._id;
-  const productData = product._id;
 
   const [validationMsg, setValidationMsg] = useState("");
 
@@ -16,7 +16,7 @@ const ReviewForm = ({ user, product }) => {
   const addReviewMutation = useMutation({
     mutationFn: addReview,
     onSuccess: () => {
-      queryClient.invalidateQueries(["reviews"]);
+      queryClient.invalidateQueries([`${product.slug}_reviews`]);
     },
   });
 
@@ -28,7 +28,7 @@ const ReviewForm = ({ user, product }) => {
     }
 
     // Mutate Reviews
-    const review = { user: userData, product: productData, comment, rating };
+    const review = { user: user._id, product: product._id, comment, rating };
     console.log("form:", review);
     addReviewMutation.mutate(review);
 

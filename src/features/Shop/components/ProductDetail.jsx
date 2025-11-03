@@ -12,13 +12,13 @@ import {
   Rating,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../../../api/productsApi";
+import { getProductBySlug } from "../../../api/productsApi";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useCart } from "../../../context/CartContext";
 import ReviewSection from "./Reviews/ReviewSection";
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { mode } = useThemeContext(); // 👈 detect light/dark
   const [product, setProduct] = useState(null);
   const [tab, setTab] = useState("description");
@@ -30,14 +30,14 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await getProductById(id);
+        const data = await getProductBySlug(slug);
         setProduct(data);
       } catch (err) {
         console.error("Error loading product:", err);
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [slug]);
 
   if (!product)
     return (
@@ -59,6 +59,20 @@ const ProductDetail = () => {
   const textSecondary = mode === "dark" ? "#bbb" : "#555";
   const divider = mode === "dark" ? "#333" : "#ddd";
 
+  // if (isLoading)
+  //     return (
+  //       <div className="flex items-center content-center p-4">
+  //         <CircularProgress />;
+  //       </div>
+  //     );
+
+  //   if (isError) {
+  //     return (
+  //       <Typography color="error" variant="body1" sx={{ my: 4 }}>
+  //         Oops! Could not load reviews at this time.
+  //       </Typography>
+  //     );
+  //   }
   return (
     <Box
       sx={{
@@ -249,7 +263,7 @@ const ProductDetail = () => {
       {/* ====== CONTENT SWITCH ====== */}
       <Box
         sx={{
-          maxWidth: 1000,
+          maxwidth: 1000,
           mx: "auto",
           backgroundColor: bgCard,
           color: textPrimary,
