@@ -12,6 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { Edit, Upload, Logout } from "@mui/icons-material";
+import Navbar from "../../features/Shop/Layout/Navbar";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ setEditData({
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/auth/login");
   };
   const handleEditToggle = () => {
   setIsEditing(!isEditing);
@@ -155,6 +156,8 @@ const handleSaveChanges = async () => {
   }
 
   return (
+    <>
+   <Navbar/>
     <Box sx={{ p: 2, display: "flex", justifyContent: "center" }}>
       <Card
         sx={{
@@ -263,7 +266,7 @@ const handleSaveChanges = async () => {
 
           <Divider sx={{ my: 3 }} />
 
-          {/* Image Upload Section */}
+        
           <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 2, flexWrap: "wrap" }}>
             <input
               accept="image/*"
@@ -308,7 +311,7 @@ const handleSaveChanges = async () => {
           </Stack>
 
           {/* Logout */}
-          <Button
+         {/*  <Button
             variant="text"
             color="error"
             startIcon={<Logout />}
@@ -316,10 +319,11 @@ const handleSaveChanges = async () => {
             sx={{ mt: 3 }}
           >
             Logout
-          </Button>
+          </Button> */}
         </CardContent>
       </Card>
     </Box>
+    </>
   );
 }
 

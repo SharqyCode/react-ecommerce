@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GoogleIcon from "@mui/icons-material/Google";
 import {
   Box,
   TextField,
@@ -13,6 +14,7 @@ import {
   Snackbar,
   Slide,
   useTheme,
+  Divider
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { getUserById } from "../../../api/usersApi";
@@ -21,6 +23,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useThemeContext } from "../../../context/ThemeContext";
 
 export default function LoginPage() {
+  const OAPI=`http://localhost:5000/api/auth/google`
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,6 +32,32 @@ export default function LoginPage() {
   const theme = useTheme();
   const { setMode } = useThemeContext();
   const { login } = useAuth();
+function OAuthButtons() {
+  const handleGoogleLogin = () => {
+    window.location.href = `${OAPI}`;
+
+  };
+
+  
+
+  return (
+    <>
+      <Divider sx={{ my: 3 }}>OR</Divider>
+      <Stack spacing={2}>
+        <Button
+        
+          fullWidth
+          variant="outlined"
+          startIcon={<GoogleIcon />}
+          onClick={handleGoogleLogin}
+        >
+          Continue with Google
+        </Button>
+     
+      </Stack>
+    </>
+  );
+}
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -158,7 +187,7 @@ export default function LoginPage() {
                 "Login"
               )}
             </Button>
-
+                <OAuthButtons/>
             <Box
               sx={{
                 display: "flex",
