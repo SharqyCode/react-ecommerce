@@ -17,6 +17,16 @@ export default function Navbar({ onSearch }) {
   const [showMiniCart, setShowMiniCart] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { setSearchQuery } = useSearch();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+    useEffect(() => {
+      setIsAuthenticated(Boolean(localStorage.getItem("token")));
+      const handleStorage = () => setIsAuthenticated(Boolean(localStorage.getItem("token")));
+      window.addEventListener("storage", handleStorage);
+      return () => window.removeEventListener("storage", handleStorage);
+    }, []);
+  
+    
   const handleSearchSubmit = (searchTerm) => {
     setSearchQuery(searchTerm);
   };
@@ -208,13 +218,24 @@ export default function Navbar({ onSearch }) {
                 <span>Login</span>
               </NavLink>
             ) : (
+              <div className="flex gap-2">
               <button
-                onClick={logout}
+                onClick={()=>logout(navigate)}
                 className="flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
               >
                 <UserRound className="w-5 h-5" />
                 <span>Logout</span>
               </button>
+               <li className="flex gap-2">
+                 
+                    <UserRound/>
+                    <NavLink to={"/profile"}>
+                      <span>Profile</span>
+                    </NavLink>
+                  
+                </li>
+              
+                </div>
             )}
           </li>
 
@@ -222,6 +243,23 @@ export default function Navbar({ onSearch }) {
           <li className="ml-2">
             <ThemeToggleButton />
           </li>
+           
+              {/* <>
+                <li>
+                  <a href="#" className="profile-link">
+                    <UserRound/>
+                    <NavLink to={"/profile"}>
+                      <span>Profile</span>
+                    </NavLink>
+                  </a>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="profile-link" style={{ background: "transparent", border: 0, cursor: "pointer" }}>
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </> */}
+         
         </ul>
 
         {/* Mobile Menu Button */}
@@ -271,12 +309,12 @@ export default function Navbar({ onSearch }) {
               <div className="flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden">
                 <input
                   value={searchTerm}
-                  onChange={handleSearch}
+                 
                   type="text"
                   placeholder="Search products..."
                   className="bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"
                 />
-                <button className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
+                <button onClick={handleSearchSubmit} className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
                   <SearchIcon className="w-5 h-5" />
                 </button>
               </div>
