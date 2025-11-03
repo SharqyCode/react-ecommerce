@@ -10,6 +10,7 @@ import AdminOrders from "../admin/pages/AdminOrders";
 import RegisterPage from "../auth/components/RegisterPage";
 import LoginPage from "../auth/components/LoginPage";
 import ForgotPassword from "../auth/components/ForgotPassword";
+import ProfilePage from "../auth/components/ProfilePage";
 import Landing from "../Home/components/landing";
 import Layout from "../Layout/Layout";
 import LandingPage from "../Layout/components/LandingPage";
@@ -38,7 +39,10 @@ export default function AppRoutes() {
           <Route path="orders" element={<AdminOrders />} />
         </Route>
 
-        {/* 404 fallback */}
+        
+        <Route path="/profile" element={<ProfilePage />} />
+
+        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Products from "./components/Products";
@@ -47,6 +47,20 @@ const ProfileIcon = () => (
 // --- End of new icon ---
 
 function Layout() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(Boolean(localStorage.getItem("token")));
+    const handleStorage = () => setIsAuthenticated(Boolean(localStorage.getItem("token")));
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  };
+
   return (
     <>
       <header className="Layout-header">
@@ -75,16 +89,33 @@ function Layout() {
                 <span>Cart</span>
               </a>
             </li>
-            {/* --- NEW Login Link --- */}
-            <li>
-              <a href="#" className="profile-link">
-                <ProfileIcon />
-                <NavLink to={"/login"}>
-                  <span>Login</span>
-                </NavLink>
-              </a>
-            </li>
-            {/* --- End of new link --- */}
+            {/* Auth/Profile links */}
+            {!isAuthenticated ? (
+              <li>
+                <a href="#" className="profile-link">
+                  <ProfileIcon />
+                  <NavLink to={"/login"}>
+                    <span>Login</span>
+                  </NavLink>
+                </a>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <a href="#" className="profile-link">
+                    <ProfileIcon />
+                    <NavLink to={"/profile"}>
+                      <span>Profile</span>
+                    </NavLink>
+                  </a>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="profile-link" style={{ background: "transparent", border: 0, cursor: "pointer" }}>
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </header>
