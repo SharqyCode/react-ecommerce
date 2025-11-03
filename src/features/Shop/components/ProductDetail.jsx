@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import { getProductById } from "../../../api/productsApi";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useCart } from "../../../context/CartContext";
+import ReviewSection from "./Reviews/ReviewSection";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -272,13 +273,7 @@ const ProductDetail = () => {
           </>
         ) : (
           <>
-            <Typography variant="h6" gutterBottom>
-              Reviews ({product.numReviews || 0})
-            </Typography>
-            <Rating value={product.rating || 0} precision={0.5} readOnly />
-            <Typography variant="body2" sx={{ mt: 1, color: textSecondary }}>
-              Be the first to leave a review!
-            </Typography>
+            <ReviewSection product={product} textColor={textSecondary} />
           </>
         )}
       </Box>
