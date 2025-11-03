@@ -5,6 +5,8 @@ import LandingPage from "../components/LandingPage";
 import Products from "../components/Products";
 import CartPage from "../components/CartPage";
 import ProductDetail from "../components/ProductDetail";
+import NotFound from "../../fallback/pages/NotFound";
+import Unauthorized from "../../fallback/pages/Unauthorized";
 
 export default function ShopRoutes() {
   return (
@@ -14,6 +16,10 @@ export default function ShopRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="cart" element={<CartPage />} />
+        {/* Start Fallback Routes */}
+        <Route path="/unauthorized" element={<Unauthorized />} />/
+        <Route path="*" element={<NotFound />} />
+        {/* End Fallback Routes */}
       </Route>
     </Routes>
   );

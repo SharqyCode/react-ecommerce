@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     message: "",
     severity: "info",
   });
+  const [loading, setLoading] = useState(true);
 
   const showSnackbar = (message, severity = "info") => {
     setSnackbar({ open: true, message, severity });
@@ -39,10 +40,23 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      getUserById(jwtDecode(token).id).then((data) => {
-        setUser(data);
-        console.log(`context setUser`, data);
-      });
+      getUserById(jwtDecode(token).id)
+        .then((data) => {
+          setUser(data);
+          console.log(`context setUser`, data);
+        })
+        .catch((error) => {
+          // Handle token invalid or API error if needed
+          console.error("Token validation error:", error);
+          localStorage.removeItem("token");
+        })
+        .finally(() => {
+          // Set loading to false once the check is complete (success or failure)
+          setLoading(false);
+        });
+    } else {
+      // If no token, also stop loading immediately
+      setLoading(false);
     }
   }, []);
 
