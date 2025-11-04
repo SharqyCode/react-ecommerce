@@ -1,17 +1,22 @@
-// src/routes/AppRoutes.jsx
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import { RoleGuard } from "./protection/RoleGuard";
-
-import { useThemeContext } from "../context/ThemeContext";
 import { useEffect } from "react";
+import { useThemeContext } from "../context/ThemeContext";
+
 import ShopRoutes from "../features/Shop/routes/ShopRoutes";
 import AuthRoutes from "../features/auth/routes/AuthRoutes";
 import AdminRoutes from "../features/admin/routes/AdminRoutes";
 import CheckoutRoutes from "../features/checkout/routes/CheckoutRoutes";
 
+import About from "../pages/About";
+import FAQ from "../pages/FAQ";
+import ShippingReturns from "../pages/ShippingReturns";
+// import PrivacyPolicy from "../pages/PrivacyPolicy";
+
+
 export default function AppRoutes() {
   const { mode } = useThemeContext();
+
   useEffect(() => {
     if (mode === "dark") {
       document.documentElement.classList.add("dark");
@@ -19,25 +24,31 @@ export default function AppRoutes() {
       document.documentElement.classList.remove("dark");
     }
   }, [mode]);
+
   return (
     <Router>
       <Routes>
-        {/* Start Shop Routes */}
+        {/* Shop Routes */}
         <Route path="/*" element={<ShopRoutes />} />
-        {/* End Shop Routes */}
-        {/* Start Authentication Routes */}
+
+        {/* Authentication Routes */}
         <Route path="/auth/*" element={<AuthRoutes />} />
-        {/* End Authentication Routes */}
-        {/* Start Payment Routes */}
+
+        {/* Checkout Routes */}
         <Route path="/payment/*" element={<CheckoutRoutes />} />
-        {/* End Payment Routes */}
-        {/* Start Admin Routes*/}
+
+        {/* Admin Routes */}
         <Route path="/admin/*" element={<AdminRoutes />} />
-        {/* End Admin Routes*/}
-        {/* Start Fallback Routes */}
-        {/* <Route path="/unauthorized" element={<Unauthorized />} />/
-        <Route path="*" element={<NotFound />} /> */}
-        {/* End Fallback Routes */}
+
+        {/* Standalone Pages */}
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="shipping-returns" element={<ShippingReturns />} />
+        {/* <Route path="privacy-policy" element={<PrivacyPolicy />} /> */}
+
+        {/* Fallback Routes */}
+        {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </Router>
   );

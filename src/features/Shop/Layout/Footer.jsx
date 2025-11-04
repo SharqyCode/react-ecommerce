@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; 
 
 const SocialIcon = ({ type }) => (
   <svg
@@ -23,9 +24,7 @@ const SocialIcon = ({ type }) => (
 const Footer = () => {
   return (
     <footer className="bg-[#1c1c1c] text-gray-300 py-10">
-      {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 md:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-        {/* Contact Us */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Contact Us</h3>
           <p>Email: support@shopease.com</p>
@@ -33,24 +32,31 @@ const Footer = () => {
           <p>123 Commerce St, Web City</p>
         </div>
 
-        {/* Links */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Support</h3>
           <ul className="space-y-2">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/about"
                 className="hover:text-[#73ceff] transition-colors duration-200"
               >
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/faq"
                 className="hover:text-[#73ceff] transition-colors duration-200"
               >
                 FAQ
+              </Link>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="hover:text-[#73ceff] transition-colors duration-200"
+              >
+                  <li><Link to="/shipping-returns" className="hover:text-blue-500">Shipping & Returns</Link></li>
               </a>
             </li>
             <li>
@@ -58,47 +64,51 @@ const Footer = () => {
                 href="#"
                 className="hover:text-[#73ceff] transition-colors duration-200"
               >
-                Shipping & Returns
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="hover:text-[#73ceff] transition-colors duration-200"
-              >
-                Privacy Policy
+                {/* Privacy Policy */}
               </a>
             </li>
           </ul>
         </div>
 
-        {/* Social */}
-        <div>
-          <h3 className="text-xl font-semibold text-white mb-4">Follow Us</h3>
-          <div className="flex space-x-4">
-            <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
-            >
-              <SocialIcon type="facebook" />
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
-            >
-              <SocialIcon type="twitter" />
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
-            >
-              <SocialIcon type="instagram" />
-            </a>
-          </div>
-        </div>
-      </div>
+       <div>
+  <h3 className="text-xl font-semibold text-white mb-4">Follow Us</h3>
+  <div className="flex space-x-4">
 
-      {/* Bottom Bar */}
+    <a
+      href="https://www.facebook.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-300 hover:text-[#1877F2] transition-colors duration-200"
+      aria-label="Facebook"
+    >
+      <SocialIcon type="facebook" />
+    </a>
+
+    <a
+      href="https://twitter.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-300 hover:text-[#1DA1F2] transition-colors duration-200"
+      aria-label="Twitter"
+    >
+      <SocialIcon type="twitter" />
+    </a>
+
+
+    <a
+      href="https://www.instagram.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-300 hover:text-[#E4405F] transition-colors duration-200"
+      aria-label="Instagram"
+    >
+      <SocialIcon type="instagram" />
+    </a>
+  </div>
+</div>
+
+
+      </div>
       <div className="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400 text-sm">
         <p>&copy; 2025 ShopEase. All rights reserved.</p>
       </div>
