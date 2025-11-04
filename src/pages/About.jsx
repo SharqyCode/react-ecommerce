@@ -52,11 +52,11 @@ const About = () => {
             <li> Secure checkout process</li>
             <li> Easy returns and refunds</li>
             <li> Dedicated customer support</li>
-            {/* <li> Dedicated customer support</li> */}
           </ul>
         </div>
       </div>
     </section>
+    /* testing my user */
   );
 };
 
