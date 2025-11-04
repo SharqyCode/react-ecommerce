@@ -64,7 +64,6 @@ const Footer = () => {
                 href="#"
                 className="hover:text-[#73ceff] transition-colors duration-200"
               >
-                {/* Privacy Policy */}
               </a>
             </li>
           </ul>
