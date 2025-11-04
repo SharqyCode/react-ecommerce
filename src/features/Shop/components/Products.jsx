@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 // 1. Import useQuery from TanStack Query
 import { useQuery } from "@tanstack/react-query";
@@ -15,8 +15,10 @@ const Products = ({ isHomePage = false }) => {
   const [sortOrder, setSortOrder] = useState("");
   const [minInput, setMinInput] = useState("");
   const [maxInput, setMaxInput] = useState("");
-  const { searchQuery } = useSearch();
+  let { searchQuery, setSearchQuery } = useSearch();
 
+  // Get the current search from the URL
+  setSearchQuery(searchParams.get("search"));
   // Get the current category from the URL
   const category = searchParams.get("category");
 
@@ -28,6 +30,12 @@ const Products = ({ isHomePage = false }) => {
     return Number.isFinite(n) ? n : null;
   };
 
+  useEffect(() => {
+    return () => {
+      setSearchQuery("");
+    };
+  }, [category]);
+
   // --- 1. Data Fetching with useQuery ---
   // Fetches ALL products once (or according to cache settings)
   const {
@@ -36,8 +44,9 @@ const Products = ({ isHomePage = false }) => {
     error, // Replaces local 'error' state
   } = useQuery({
     queryKey: [ALL_PRODUCTS_QUERY_KEY],
-    queryFn: getAllProducts, // Assumes this fetches the complete list
-    // Optional: Keep data in cache for a long time since we filter locally
+    queryFn: getAllProducts,
+
+    // Keep data in cache for a long time since we filter locally
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
@@ -157,7 +166,7 @@ const Products = ({ isHomePage = false }) => {
             </div>
 
             <button
-              className="w-full mt-2 bg-[#1976d2] hover:bg-[#73ceff] text-white py-2 rounded-md font-medium transition-colors duration-300"
+              className="w-full mt-2 bg-primary hover:bg-secondary text-black py-2 rounded-md font-medium transition-colors duration-300"
               onClick={() => {
                 setMinInput("");
                 setMaxInput("");
@@ -198,8 +207,10 @@ const Products = ({ isHomePage = false }) => {
           </p>
         ) : (
           <div
-            className={`flex gap-4 pb-2 ${
-              isHomePage ? " overflow-x-scroll" : "flex-wrap"
+            className={`${
+              isHomePage
+                ? "flex gap-6 pb-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+                : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
             }`}
           >
             {productsToShow.map((p) => (

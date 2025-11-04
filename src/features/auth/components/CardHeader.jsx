@@ -1,11 +1,12 @@
-import React from 'react'
-import styles from "./CardHeader.module.css"
-import { Link } from 'react-router-dom'
+import React from "react";
+import styles from "./CardHeader.module.css";
+import { Link } from "react-router-dom";
 
 export default function CardHeader() {
-    return (
-        <Link to="/" className={styles.card_header}>
-            ShopEase
-        </Link>
-    )
+  return (
+    <Link to="/" className={styles.card_header + " flex items-center"}>
+      <img src="/logo.png" className="w-20" alt="" />
+      <span className="ml-2">MeeM</span>
+    </Link>
+  );
 }

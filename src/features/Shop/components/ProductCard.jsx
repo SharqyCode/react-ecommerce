@@ -5,48 +5,39 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 
 export default function ProductCard({ product, isHomePage }) {
-  const { addProduct } = useCart();
   return (
     <Link
       to={`/products/${product.slug || product._id}`}
-      className={`${
-        isHomePage
-          ? "w-60"
-          : "w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.33%-1.333rem)] lg:w-[calc(25%-1.5rem)] "
-      }  relative block bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-md hover:shadow-[#1976d2] transition-all duration-300`}
+      className={`relative block rounded-xl overflow-hidden bg-white dark:bg-[#1e1e1e]
+              border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg
+              hover:-translate-y-1 transition-all duration-300 ${
+                isHomePage ? "snap-center shrink-0 w-60" : "w-full"
+              }`}
     >
       <img
         src={product.thumbnail || "https://placehold.co/300x300?text=No+Image"}
-        alt={product.name || "Product"}
-        className=" h-60 object-contain transition-transform duration-300"
+        alt={product.name}
+        className="aspect-square w-full object-cover hover:scale-105 transition-transform duration-500"
       />
+      <div className="absolute inset-0 bg-black/0 hover:bg-black/5 transition-colors duration-300" />
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">
           {product.name}
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          {product.description
-            ? product.description.length > 80
-              ? `${product.description.slice(0, 80)}...`
-              : product.description
-            : ""}
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+          {product.description?.slice(0, 80)}...
         </p>
-        <p className="text-[#1976d2] dark:text-[#73ceff] font-semibold text-2xl mb-3 flex">
-          <span className="text-sm">$</span>
+        <p className="text-2xl font-semibold text-secondary dark:text-primary mb-3">
+          <span className="text-sm align-top">$</span>
           {product.price.toFixed(2)}
         </p>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <Rating readOnly value={product.rating} size="small" />
           <Typography variant="subtitle2" color="secondary">
             ({product.numReviews})
           </Typography>
         </div>
-        {/* <div className="h-full flex flex-col justify-end items-center">
-          <button className="inline-block bg-[#1976d2] hover:bg-[#73ceff] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
-            View
-          </button>
-        </div> */}
       </div>
     </Link>
   );

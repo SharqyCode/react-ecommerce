@@ -6,6 +6,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
 import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
 import { useSearch } from "../../../context/SearchContext";
+import {
+  DoorBack,
+  DoorFrontOutlined,
+  DoorFrontRounded,
+} from "@mui/icons-material";
 export default function Navbar({ onSearch }) {
   const { user, logout } = useAuth();
   const { products } = useCart();
@@ -18,24 +23,24 @@ export default function Navbar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const { setSearchQuery } = useSearch();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-    useEffect(() => {
+
+  useEffect(() => {
+    setIsAuthenticated(Boolean(localStorage.getItem("token")));
+    const handleStorage = () =>
       setIsAuthenticated(Boolean(localStorage.getItem("token")));
-      const handleStorage = () => setIsAuthenticated(Boolean(localStorage.getItem("token")));
-      window.addEventListener("storage", handleStorage);
-      return () => window.removeEventListener("storage", handleStorage);
-    }, []);
-  
-    
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   const handleSearchSubmit = (searchTerm) => {
-    setSearchQuery(searchTerm);
+    navigate(`/products?search=${searchTerm}`);
   };
 
   const itemCount =
-    products?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
+    products?.reduce((sum, item) => sum + (+item.quantity || 1), 0) || 0;
   const subtotal =
     products?.reduce(
-      (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+      (sum, item) => sum + (+item.price || 0) * (+item.quantity || 1),
       0
     ) || 0;
 
@@ -53,9 +58,10 @@ export default function Navbar({ onSearch }) {
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl font-bold text-[#1976d2] dark:text-[#73ceff] hover:text-[#73ceff] dark:hover:text-[#1976d2] transition-colors duration-300"
+          className="text-2xl flex items-center font-bold dark:text-[#fce918]  "
         >
-          ShopEase
+          <img className="w-14" src="/logo.png" alt="" />
+          MeeM
         </Link>
 
         {/* Search Bar */}
@@ -88,7 +94,7 @@ export default function Navbar({ onSearch }) {
               handleSearchSubmit(searchTerm);
             }}
             type="submit"
-            className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors duration-200"
+            className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-secondary dark:hover:text-primary transition-colors duration-200"
           >
             <SearchIcon className="w-5 h-5" />
           </button>
@@ -100,8 +106,8 @@ export default function Navbar({ onSearch }) {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                  isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                `hover:text-secondary dark:hover:text-primary transition-colors ${
+                  isActive ? "text-secondary dark:text-primary" : ""
                 }`
               }
             >
@@ -113,8 +119,8 @@ export default function Navbar({ onSearch }) {
             <NavLink
               to="/products"
               className={({ isActive }) =>
-                `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                  isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                `hover:text-secondary dark:hover:text-primary transition-colors ${
+                  isActive ? "text-secondary dark:text-primary" : ""
                 }`
               }
             >
@@ -128,7 +134,7 @@ export default function Navbar({ onSearch }) {
             onMouseEnter={() => setShowMiniCart(true)}
             onMouseLeave={() => setShowMiniCart(false)}
           >
-            <button className="relative flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
+            <button className="relative flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors">
               <ShoppingBasket className="w-5 h-5" />
               <span>Cart</span>
               {itemCount > 0 && (
@@ -136,7 +142,7 @@ export default function Navbar({ onSearch }) {
                   initial={{ scale: 0 }}
                   animate={{ scale: pulse ? [1, 1.3, 1] : 1 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="absolute -top-2 -right-3 bg-[#1976d2] dark:bg-[#73ceff] text-white text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
+                  className="absolute -top-2 -right-3 bg-secondary dark:bg-primary text-black text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
                 >
                   {itemCount}
                 </motion.span>
@@ -191,7 +197,7 @@ export default function Navbar({ onSearch }) {
                       <div className="flex gap-2">
                         <button
                           onClick={() => navigate("/cart")}
-                          className="flex-1 bg-[#1976d2] hover:bg-[#73ceff] text-white rounded-md py-1.5 text-sm transition"
+                          className="flex-1 bg-secondary hover:bg-primary text-black rounded-md py-1.5 text-sm transition"
                         >
                           View Cart
                         </button>
@@ -209,8 +215,8 @@ export default function Navbar({ onSearch }) {
               <NavLink
                 to="/auth/login"
                 className={({ isActive }) =>
-                  `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                    isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                  `flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors ${
+                    isActive ? "text-secondary dark:text-primary" : ""
                   }`
                 }
               >
@@ -218,24 +224,26 @@ export default function Navbar({ onSearch }) {
                 <span>Login</span>
               </NavLink>
             ) : (
-              <div className="flex gap-2">
-              <button
-                onClick={()=>logout(navigate)}
-                className="flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
-              >
-                <UserRound className="w-5 h-5" />
-                <span>Logout</span>
-              </button>
-               <li className="flex gap-2">
-                 
-                    <UserRound/>
-                    <NavLink to={"/profile"}>
-                      <span>Profile</span>
-                    </NavLink>
-                  
-                </li>
-              
-                </div>
+              <div className="flex gap-4">
+                <NavLink
+                  to={"/profile"}
+                  className={({ isActive }) =>
+                    `flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors ${
+                      isActive ? "text-secondary dark:text-primary" : ""
+                    }`
+                  }
+                >
+                  <UserRound className="w-5 h-5" />
+                  <span>Profile</span>
+                </NavLink>
+                <button
+                  onClick={() => logout(navigate)}
+                  className="flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors"
+                >
+                  <DoorFrontOutlined className="w-5 h-5" />
+                  <span>Logout</span>
+                </button>
+              </div>
             )}
           </li>
 
@@ -243,28 +251,11 @@ export default function Navbar({ onSearch }) {
           <li className="ml-2">
             <ThemeToggleButton />
           </li>
-           
-              {/* <>
-                <li>
-                  <a href="#" className="profile-link">
-                    <UserRound/>
-                    <NavLink to={"/profile"}>
-                      <span>Profile</span>
-                    </NavLink>
-                  </a>
-                </li>
-                <li>
-                  <button onClick={handleLogout} className="profile-link" style={{ background: "transparent", border: 0, cursor: "pointer" }}>
-                    <span>Logout</span>
-                  </button>
-                </li>
-              </> */}
-         
         </ul>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-700 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
+          className="md:hidden text-gray-700 dark:text-gray-300 hover:text-secondary dark:hover:text-primary transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -294,12 +285,12 @@ export default function Navbar({ onSearch }) {
               className="fixed top-0 right-0 h-full w-3/4 sm:w-2/3 bg-gray-100 dark:bg-[#1c1c1c] border-l border-gray-300 dark:border-gray-700 shadow-xl z-50 flex flex-col p-6 space-y-6 md:hidden transition-colors duration-300"
             >
               <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-semibold text-[#1976d2] dark:text-[#73ceff]">
+                <h2 className="text-lg font-semibold text-secondary dark:text-primary">
                   Menu
                 </h2>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="text-gray-500 dark:text-gray-400 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
+                  className="text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-primary transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -309,12 +300,14 @@ export default function Navbar({ onSearch }) {
               <div className="flex items-center bg-gray-200 dark:bg-[#2a2a2a] rounded-md overflow-hidden">
                 <input
                   value={searchTerm}
-                 
                   type="text"
                   placeholder="Search products..."
                   className="bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 w-full outline-none placeholder-gray-500 dark:placeholder-gray-400"
                 />
-                <button onClick={handleSearchSubmit} className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors">
+                <button
+                  onClick={handleSearchSubmit}
+                  className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-secondary dark:hover:text-primary transition-colors"
+                >
                   <SearchIcon className="w-5 h-5" />
                 </button>
               </div>
@@ -325,8 +318,8 @@ export default function Navbar({ onSearch }) {
                   to="/"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                    `hover:text-secondary dark:hover:text-primary transition-colors ${
+                      isActive ? "text-secondary dark:text-primary" : ""
                     }`
                   }
                 >
@@ -337,8 +330,8 @@ export default function Navbar({ onSearch }) {
                   to="/products"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                    `hover:text-secondary dark:hover:text-primary transition-colors ${
+                      isActive ? "text-secondary dark:text-primary" : ""
                     }`
                   }
                 >
@@ -349,13 +342,23 @@ export default function Navbar({ onSearch }) {
                   to="/cart"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                      isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                    `flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors ${
+                      isActive ? "text-secondary dark:text-primary" : ""
                     }`
                   }
                 >
                   <ShoppingBasket className="w-5 h-5" />
                   <span>Cart</span>
+                  {itemCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: pulse ? [1, 1.3, 1] : 1 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="absolute -top-2 -right-3 bg-secondary dark:bg-primary text-[10px] font-bold rounded-full px-[6px] py-[2px] shadow-md"
+                    >
+                      {itemCount}
+                    </motion.span>
+                  )}
                 </NavLink>
 
                 {!user ? (
@@ -363,8 +366,8 @@ export default function Navbar({ onSearch }) {
                     to="/auth/login"
                     onClick={() => setMenuOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors ${
-                        isActive ? "text-[#1976d2] dark:text-[#73ceff]" : ""
+                      `flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors ${
+                        isActive ? "text-secondary dark:text-primary" : ""
                       }`
                     }
                   >
@@ -377,7 +380,7 @@ export default function Navbar({ onSearch }) {
                       logout();
                       setMenuOpen(false);
                     }}
-                    className="flex items-center gap-1 hover:text-[#1976d2] dark:hover:text-[#73ceff] transition-colors"
+                    className="flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors"
                   >
                     <UserRound className="w-5 h-5" />
                     <span>Logout</span>

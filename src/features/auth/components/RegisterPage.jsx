@@ -104,7 +104,7 @@ export default function RegisterPage() {
         gutterBottom
         sx={{
           fontWeight: "bold",
-          color: mode === "light" ? "#1976d2" : "#90caf9",
+          color: mode === "light" ? "primary.light" : "primary.main",
           mb: 3,
         }}
       >
@@ -182,10 +182,10 @@ export default function RegisterPage() {
           fontSize: "1rem",
           fontWeight: "bold",
           borderRadius: "10px",
-          backgroundColor:
-            mode === "light" ? "#1976d2" : theme.palette.primary.main,
+          backgroundColor: mode === "light" ? "primary.light" : "primary.main",
           "&:hover": {
-            backgroundColor: mode === "light" ? "#1565c0" : "#2196f3",
+            backgroundColor:
+              mode === "light" ? "primary.main" : "primary.light",
           },
         }}
         onClick={handleRegister}
@@ -199,7 +199,7 @@ export default function RegisterPage() {
         align="center"
         sx={{
           mt: 2,
-          color: mode === "light" ? "#1976d2" : "#90caf9",
+          color: mode === "light" ? "primary.light" : "primary.main",
           cursor: "pointer",
           fontWeight: "bold",
         }}

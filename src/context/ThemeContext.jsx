@@ -25,6 +25,10 @@ export const ThemeProvider = ({ children }) => {
     () =>
       createTheme({
         palette: {
+          primary: {
+            main: "#fce918",
+            light: "#e8c303",
+          },
           mode,
           ...(mode === "light"
             ? {

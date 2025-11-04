@@ -11,9 +11,12 @@ import slide6 from "../img/slide6.jpg";
 import slide7 from "../img/slide7.jpg";
 import slide8 from "../img/slide8.jpg";
 
-import electronicsImg from "../img/electronics.jpg";
-import appearelImg from "../img/appearel.jpg";
-import goodsImg from "../img/goods.jpg";
+// import electronicsImg from "../img/electronics.jpg";
+// import appearelImg from "../img/appearel.jpg";
+// import goodsImg from "../img/goods.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "../../../api/categoriesApi";
+import { Alert, Button, CircularProgress } from "@mui/material";
 
 const LandingPage = () => {
   const slides = [
@@ -27,6 +30,18 @@ const LandingPage = () => {
     slide8,
   ];
   const [current, setCurrent] = useState(0);
+
+  const {
+    data,
+    isLoading: catLoading,
+    isError: catError,
+    isSuccess: catSuccess,
+    refetch: catRefetch,
+  } = useQuery({
+    queryKey: ["allCategories"],
+    queryFn: getAllCategories,
+    staleTime: 1000 * 60 * 60,
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,14 +73,18 @@ const LandingPage = () => {
         {/* Overlay Content */}
         <div className="absolute z-20 inset-0 bg-black/40 flex flex-col justify-center items-center text-center text-white px-4">
           <h1 className="text-4xl md:text-6xl font-bold mb-3">
-            Welcome to ShopEase
+            Welcome to{" "}
+            <span className="flex items-center justify-center">
+              <img src="/logo.png" className="w-20" alt="" />
+              <span className="text-primary">MeeM</span>
+            </span>
           </h1>
           <p className="text-lg md:text-xl mb-6">
             Discover the best deals and latest trends all in one place.
           </p>
           <Link
             to="/products"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+            className="bg-primary hover:bg-secondary text-black font-semibold py-3 px-6 rounded-lg transition"
           >
             Shop Now
           </Link>
@@ -93,38 +112,27 @@ const LandingPage = () => {
           Shop by Category
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
-            <img
-              src={electronicsImg}
-              alt="Electronics"
-              className="w-full h-56 object-cover"
-            />
-            <h3 className="text-xl font-semibold py-4 text-gray-700">
-              Electronics
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
-            <img
-              src={appearelImg}
-              alt="Apparel"
-              className="w-full h-56 object-cover"
-            />
-            <h3 className="text-xl font-semibold py-4 text-gray-700">
-              Apparel
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
-            <img
-              src={goodsImg}
-              alt="Home Goods"
-              className="w-full h-56 object-cover"
-            />
-            <h3 className="text-xl font-semibold py-4 text-gray-700">
-              Home Goods
-            </h3>
-          </div>
+          {catLoading ? (
+            <CircularProgress sx={{ display: "block", mx: "auto", my: 5 }} />
+          ) : catError ? (
+            <Alert
+              severity="error"
+              sx={{ display: "block", marginX: "auto", my: 5 }}
+            >
+              Error fetching categories.
+              <Button color="error" onClick={catRefetch} sx={{ ml: 2 }}>
+                Retry
+              </Button>
+            </Alert>
+          ) : catSuccess ? (
+            data.category.map((cat) => {
+              return <p key={cat._id}>{cat.name}</p>;
+            })
+          ) : (
+            <div className="flex justify-center items-center py-10 text-gray-500">
+              No categories found.
+            </div>
+          )}
         </div>
       </section>
 

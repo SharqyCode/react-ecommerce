@@ -143,7 +143,7 @@ const ProductDetail = () => {
             )}
             <Typography
               sx={{
-                color: mode === "dark" ? "#73ceff" : "#1976d2",
+                color: mode === "light" ? "primary.light" : "primary.main",
                 fontWeight: "bold",
               }}
             >
@@ -209,9 +209,9 @@ const ProductDetail = () => {
               }}
               variant="contained"
               sx={{
-                backgroundColor: mode === "dark" ? "#73ceff" : "#1976d2",
+                backgroundColor: "primary",
                 "&:hover": {
-                  backgroundColor: mode === "dark" ? "#5eb8e8" : "#479fe8",
+                  backgroundColor: "primary.light",
                 },
               }}
             >
