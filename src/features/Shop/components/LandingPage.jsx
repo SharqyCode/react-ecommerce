@@ -129,6 +129,7 @@ const LandingPage = () => {
       </section>
 
       {/* Product Section */}
+
       <Products isHomePage={true} />
     </>
   );

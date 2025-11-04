@@ -187,7 +187,7 @@ const Products = ({ isHomePage = false }) => {
       )}
 
       {/* --- Products Content --- */}
-      <div className="flex-1">
+      <div className="flex-">
         <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
           {title}
         </h2>
@@ -198,8 +198,8 @@ const Products = ({ isHomePage = false }) => {
           </p>
         ) : (
           <div
-            className={`flex gap-4  ${
-              isHomePage ? " overflow-x-scroll " : "flex-wrap"
+            className={`flex gap-4 pb-2 ${
+              isHomePage ? " overflow-x-scroll" : "flex-wrap"
             }`}
           >
             {productsToShow.map((p) => (
