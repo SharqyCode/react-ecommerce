@@ -24,6 +24,11 @@ export const getProductById = async (productId) => {
   return data;
 };
 
+export const getProductBySlug = async (slug) => {
+  const { data } = await axios.get(`${BASE_URL}/${slug}`);
+  return data;
+};
+
 
 export const addProduct = async (product) => {
   try {

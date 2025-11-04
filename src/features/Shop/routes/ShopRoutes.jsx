@@ -14,7 +14,7 @@ export default function ShopRoutes() {
       <Route path="/" element={<ShopLayout />}>
         <Route index element={<LandingPage />} />
         <Route path="products" element={<Products />} />
-        <Route path="products/:id" element={<ProductDetail />} />
+        <Route path="products/:slug" element={<ProductDetail />} />
         <Route path="cart" element={<CartPage />} />
         {/* Start Fallback Routes */}
         <Route path="/unauthorized" element={<Unauthorized />} />/

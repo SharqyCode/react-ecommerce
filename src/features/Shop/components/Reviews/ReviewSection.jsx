@@ -10,7 +10,6 @@ import React, { useState } from "react";
 import ReviewCard from "./ReviewCard";
 import { useQuery } from "@tanstack/react-query";
 import { getProductReviews } from "../../../../api/reviewsApi";
-import { useAuth } from "../../../../context/AuthContext";
 
 // Main Review Section Component
 export default function ReviewSection({ product, textColor }) {
@@ -19,11 +18,15 @@ export default function ReviewSection({ product, textColor }) {
     queryKey: [`${product.slug}_reviews`],
     queryFn: () => getProductReviews(product._id),
   });
-  const { user } = useAuth();
 
   const reviews = data || [];
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading)
+    return (
+      <div className="flex items-center content-center p-4">
+        <CircularProgress />;
+      </div>
+    );
 
   if (isError) {
     return (
@@ -75,7 +78,7 @@ export default function ReviewSection({ product, textColor }) {
       )}
 
       {/* Review Form */}
-      <ReviewForm product={product} user={user} />
+      <ReviewForm product={product} />
     </Box>
   );
 }
