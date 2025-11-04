@@ -48,7 +48,7 @@ const ProductDetail = () => {
           color: mode === "dark" ? "#ddd" : "#333",
         }}
       >
-        Loading...
+        Loading.
       </Typography>
     );
 

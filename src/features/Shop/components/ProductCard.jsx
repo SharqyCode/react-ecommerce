@@ -36,7 +36,7 @@ export default function ProductCard({ product, isHomePage }) {
           ${product.price}
         </p>
         <Link
-          to={`/products/${product._id || product.id}`}
+          to={`/products/${product.slug||product._id || product.id}`}
           className="inline-block bg-[#1976d2] hover:bg-[#73ceff] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300"
         >
           View / Add to Cart

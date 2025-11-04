@@ -6,8 +6,8 @@ import { addReview } from "../../../../api/reviewsApi";
 const ReviewForm = ({ user, product }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const userData = user._id;
-  const productData = product._id;
+  // const userData = user._id;
+  // const productData = product._id;
 
   const [validationMsg, setValidationMsg] = useState("");
 
@@ -28,7 +28,7 @@ const ReviewForm = ({ user, product }) => {
     }
 
     // Mutate Reviews
-    const review = { user: userData, product: productData, comment, rating };
+    const review = { user: user._id, product: product._id, comment, rating };
     console.log("form:", review);
     addReviewMutation.mutate(review);
 
