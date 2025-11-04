@@ -36,12 +36,12 @@ export default function ProductCard({ product, isHomePage }) {
           <span className="text-sm">$</span>
           {product.price.toFixed(2)}
         </p>
-        <Link
+       {/*  <Link
           to={`/products/${product.slug||product._id || product.id}`}
           className="inline-block bg-[#1976d2] hover:bg-[#73ceff] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300"
         >
           View / Add to Cart
-        </Link>
+        </Link> */}
         <div className="flex items-center">
           <Rating readOnly value={product.rating} size="small" />
           <Typography variant="subtitle2" color="secondary">
