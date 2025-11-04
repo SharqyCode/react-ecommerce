@@ -13,10 +13,12 @@ import {
   Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useThemeContext } from "../../../context/ThemeContext";
 
 const CategoriesBar = () => {
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get("category");
+  const { mode } = useThemeContext();
 
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: ["allCategories"],
@@ -44,14 +46,19 @@ const CategoriesBar = () => {
   if (isSuccess && categories?.length > 0) {
     return (
       <div className="w-full">
-        <Accordion defaultExpanded>
+        <Accordion
+          defaultExpanded
+          sx={{ backgroundColor: mode === "light" ? "white" : "#0a0a0a" }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="category-content"
             id="category-header"
-            className="dark:bg-[#1e1e1e]"
           >
-            <Typography variant="h6" className="font-semibold dark:text-white">
+            <Typography
+              variant="h6"
+              className="font-semibold dark:text-primary"
+            >
               Browse Categories
             </Typography>
           </AccordionSummary>

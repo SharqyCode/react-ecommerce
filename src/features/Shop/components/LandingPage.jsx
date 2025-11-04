@@ -17,6 +17,7 @@ import slide8 from "../img/slide8.jpg";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../api/categoriesApi";
 import { Alert, Button, CircularProgress } from "@mui/material";
+import OurVendors from "./OurVendors";
 
 const LandingPage = () => {
   const slides = [
@@ -107,34 +108,8 @@ const LandingPage = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-gray-50 text-center">
-        <h2 className="text-3xl font-bold mb-10 text-gray-800">
-          Shop by Category
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-          {catLoading ? (
-            <CircularProgress sx={{ display: "block", mx: "auto", my: 5 }} />
-          ) : catError ? (
-            <Alert
-              severity="error"
-              sx={{ display: "block", marginX: "auto", my: 5 }}
-            >
-              Error fetching categories.
-              <Button color="error" onClick={catRefetch} sx={{ ml: 2 }}>
-                Retry
-              </Button>
-            </Alert>
-          ) : catSuccess ? (
-            data.category.map((cat) => {
-              return <p key={cat._id}>{cat.name}</p>;
-            })
-          ) : (
-            <div className="flex justify-center items-center py-10 text-gray-500">
-              No categories found.
-            </div>
-          )}
-        </div>
-      </section>
+
+      <OurVendors />
 
       {/* Product Section */}
 
