@@ -77,7 +77,7 @@ const LandingPage = () => {
             Welcome to{" "}
             <span className="flex items-center justify-center">
               <img src="/logo.png" className="w-20" alt="" />
-              <span className="text-primary">MeeM</span>
+              <span className="text-primary font-logo tracking-wide">meem</span>
             </span>
           </h1>
           <p className="text-lg md:text-xl mb-6">

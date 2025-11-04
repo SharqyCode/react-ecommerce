@@ -58,10 +58,10 @@ export default function Navbar({ onSearch }) {
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl flex items-center font-bold dark:text-[#fce918]  "
+          className="text-2xl flex items-center font-logo font-bold tracking-wide dark:text-[#fce918]  "
         >
           <img className="w-14" src="/logo.png" alt="" />
-          MeeM
+          meem
         </Link>
 
         {/* Search Bar */}

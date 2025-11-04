@@ -11,6 +11,7 @@ import AdminRoutes from "../features/admin/routes/AdminRoutes";
 import CheckoutRoutes from "../features/checkout/routes/CheckoutRoutes";
 
 import ProfilePage from "../auth/components/ProfilePage";
+import InfoRoutes from "../features/info/routes/InfoRoutes";
 
 export default function AppRoutes() {
   const { mode } = useThemeContext();
@@ -36,9 +37,9 @@ export default function AppRoutes() {
         {/* Start Admin Routes*/}
         <Route path="/admin/*" element={<AdminRoutes />} />
         {/* End Admin Routes*/}
-        {/* Client-facing routes */}
-        {/* <Route path="/" element={<Home />} /> */}
-        {/* <Route path="/shop" element={<Shop />} /> */}
+        {/* Start Info Routes*/}
+        <Route path="/info/*" element={<InfoRoutes />} />
+        {/* End Info Routes*/}
 
         {/* Admin routes nested under /admin */}
 

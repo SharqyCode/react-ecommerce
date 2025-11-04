@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const SocialIcon = ({ type }) => (
   <svg
@@ -28,7 +29,7 @@ const Footer = () => {
         {/* Contact Us */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Contact Us</h3>
-          <p>Email: support@shopease.com</p>
+          <p>Email: support@meem.com</p>
           <p>Phone: +1 (234) 567-890</p>
           <p>123 Commerce St, Web City</p>
         </div>
@@ -38,36 +39,36 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white mb-4">Support</h3>
           <ul className="space-y-2">
             <li>
-              <a
-                href="#"
-                className="hover:text-[#73ceff] transition-colors duration-200"
+              <Link
+                to="/info/about"
+                className="hover:text-primary transition-colors duration-200"
               >
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-[#73ceff] transition-colors duration-200"
+              <Link
+                to="/info/contact"
+                className="hover:text-primary transition-colors duration-200"
               >
-                FAQ
-              </a>
+                Contact Us
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-[#73ceff] transition-colors duration-200"
+              <Link
+                to="/info/shipping"
+                className="hover:text-primary transition-colors duration-200"
               >
                 Shipping & Returns
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-[#73ceff] transition-colors duration-200"
+              <Link
+                to="/info/privacy"
+                className="hover:text-primary transition-colors duration-200"
               >
                 Privacy Policy
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -77,20 +78,20 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white mb-4">Follow Us</h3>
           <div className="flex space-x-4">
             <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
+              href="https://facebook.com"
+              className="text-gray-300 hover:text-primary transition-colors duration-200"
             >
               <SocialIcon type="facebook" />
             </a>
             <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
+              href="https://x.com"
+              className="text-gray-300 hover:text-primary transition-colors duration-200"
             >
               <SocialIcon type="twitter" />
             </a>
             <a
-              href="#"
-              className="text-gray-300 hover:text-[#73ceff] transition-colors duration-200"
+              href="https://instagram.com"
+              className="text-gray-300 hover:text-primary transition-colors duration-200"
             >
               <SocialIcon type="instagram" />
             </a>
@@ -100,7 +101,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400 text-sm">
-        <p>&copy; 2025 ShopEase. All rights reserved.</p>
+        <p>&copy; 2025 meem. All rights reserved.</p>
       </div>
     </footer>
   );

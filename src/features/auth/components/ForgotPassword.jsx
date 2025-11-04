@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { useNavigate } from "react-router-dom";
+import { forgetPass } from "../../../api/usersApi";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ export default function ForgotPassword() {
   const navigate = useNavigate();
   const theme = useTheme(); // Hook to access the current light/dark theme settings
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (!email) {
       setError("Please enter your email.");
       setMessage("");
@@ -31,6 +32,7 @@ export default function ForgotPassword() {
     }
 
     // In a real application, you would call your authentication service here
+    await forgetPass(email);
     setError("");
     setMessage("Reset link has been sent to your email!");
   };

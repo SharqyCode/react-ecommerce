@@ -37,3 +37,9 @@ export const deleteUserById = async (userId) => {
     console.log(pew);
     return pew
 }
+
+export const forgetPass = async (email) => {
+    const pew = (await (axios.post(`${BASE_URL}/forgetpass`, { email }))).data
+    console.log(pew);
+    return pew;
+}
