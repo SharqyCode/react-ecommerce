@@ -11,54 +11,54 @@ import {
 const vendors = [
   {
     name: "UrbanThreads",
-    image: "/assets/vendors/urbanthreads.png",
+    image: "/assets/vendors/UrbanThreads.jpg",
     description:
       "Modern streetwear meets comfort — premium designs crafted for bold individuals.",
   },
   {
     name: "TechNova",
-    image: "/assets/vendors/technova.png",
+    image: "/assets/vendors/TechNova.jpg",
     description:
       "Cutting-edge electronics and smart devices that redefine daily convenience.",
   },
   {
     name: "GreenHaven",
-    image: "/assets/vendors/greenhaven.png",
+    image: "/assets/vendors/GreenHaven.jpg",
     description:
       "Eco-conscious home essentials built with sustainability at the heart.",
   },
   {
     name: "LuxeJewels",
-    image: "/assets/vendors/luxejewels.png",
+    image: "/assets/vendors/LuxeJewels.jpg",
     description:
       "Handcrafted jewelry that brings timeless elegance to every occasion.",
   },
   {
     name: "FitFuel",
-    image: "/assets/vendors/fitfuel.png",
+    image: "/assets/vendors/FitFuel.jpg",
     description:
       "Premium supplements and gear to elevate your performance and wellness journey.",
   },
   {
     name: "PixelPlay",
-    image: "/assets/vendors/pixelplay.png",
+    image: "/assets/vendors/PixelPlay.jpg",
     description:
       "Immersive gaming gear and accessories for every passionate gamer.",
   },
   {
     name: "CasaBella",
-    image: "/assets/vendors/casabella.png",
+    image: "/assets/vendors/CasaBella.jpg",
     description:
       "Luxury furniture and décor that transforms your house into a home.",
   },
   {
     name: "WanderLuxe",
-    image: "/assets/vendors/wanderluxe.png",
+    image: "/assets/vendors/WanderLuxe.jpg",
     description: "Stylish travel essentials designed for the modern explorer.",
   },
   {
     name: "Petopia",
-    image: "/assets/vendors/petopia.png",
+    image: "/assets/vendors/Petopia.png",
     description:
       "Wholesome treats and accessories for your furry friends — because they deserve the best.",
   },

@@ -127,8 +127,8 @@ const Products = ({ isHomePage = false }) => {
   return (
     <section
       className={`${
-        isHomePage ? " overflow-x-auto " : ""
-      }flex flex-col md:flex-row max-w-7xl mx-auto mt-4 p-6 gap-10 bg-gray-50 dark:bg-[#121212] transition-colors duration-300`}
+        isHomePage ? " overflow-x-auto" : ""
+      }flex flex-col md:flex-row rounded max-w-7xl mx-auto my-8 p-6 gap-10 bg-gray-50 dark:bg-[#121212] transition-colors duration-300`}
     >
       {/* --- Filter Sidebar (Price/Sort UI) --- */}
       {!isHomePage && (

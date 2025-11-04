@@ -47,7 +47,6 @@ const CategoriesBar = () => {
     return (
       <div className="w-full">
         <Accordion
-          defaultExpanded
           sx={{ backgroundColor: mode === "light" ? "white" : "#0a0a0a" }}
         >
           <AccordionSummary
