@@ -1,6 +1,6 @@
 import React from "react";
 
-const About = () => {
+const About = () => {  
   return (
     <section className="min-h-screen bg-white text-gray-800 px-6 md:px-20 py-20">
       <div className="max-w-4xl mx-auto text-center">
@@ -52,6 +52,7 @@ const About = () => {
             <li> Secure checkout process</li>
             <li> Easy returns and refunds</li>
             <li> Dedicated customer support</li>
+            {/* <li> Dedicated customer support</li> */}
           </ul>
         </div>
       </div>
