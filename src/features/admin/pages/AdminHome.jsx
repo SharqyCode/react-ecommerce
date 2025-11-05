@@ -5,6 +5,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "../../../api/productsApi";
 import { getAllUsers } from "../../../api/usersApi";
+import { getAllOrders } from "../../../api/ordersApi";
 
 const AdminHome = () => {
   const {
@@ -22,15 +23,36 @@ const AdminHome = () => {
     data: usersData,
     isError: usersError,
     isSuccess: usersSuccess,
-    usersLoading,
+    isLoading: usersLoading,
   } = useQuery({
     queryKey: ["users"],
     staleTime: 1000 * 60 * 30,
     queryFn: getAllUsers,
   });
 
+  const {
+    data: ordersData,
+    isError: ordersError,
+    isSuccess: ordersSuccess,
+    isLoading: ordersLoading,
+  } = useQuery({
+    queryKey: ["orders"],
+    staleTime: 1000 * 60 * 30,
+    queryFn: getAllOrders,
+  });
+
   const users = usersData || [];
   const products = productsData || [];
+  const orders = ordersData || [];
+
+  const totalRevenue = orders.reduce((acc, order) => {
+    return acc + order?.totalPrice;
+  }, 0);
+
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 
   return (
     <div className="min-h-screen  py-16 px-6 md:px-20">
@@ -51,8 +73,11 @@ const AdminHome = () => {
           <div className="bg-white dark:bg-[#222] rounded-2xl shadow p-6 text-center">
             <ShoppingBag className="h-10 w-10 text-secondary dark:text-primary mx-auto mb-2" />
 
-            <h3 className="text-2xl font-semibold">1,248</h3>
-
+            {ordersLoading ? (
+              "loading..."
+            ) : (
+              <h3 className="text-2xl font-semibold">{orders.length}</h3>
+            )}
             <p className="text-gray-500 dark:text-gray-400">Total Orders</p>
           </div>
 
@@ -78,7 +103,13 @@ const AdminHome = () => {
 
           <div className="bg-white dark:bg-[#222] rounded-2xl shadow p-6 text-center">
             <ChartBar className="h-10 w-10 text-secondary dark:text-primary mx-auto mb-2" />
-            <h3 className="text-2xl font-semibold">$34,920</h3>
+            {ordersLoading ? (
+              "loading..."
+            ) : (
+              <h3 className="text-2xl font-semibold wrap-break-word">
+                {formatter.format(totalRevenue)}
+              </h3>
+            )}
             <p className="text-gray-500 dark:text-gray-400">Total Revenue</p>
           </div>
         </div>

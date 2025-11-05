@@ -12,6 +12,17 @@ export const addOrder = async (order) => {
     return pew;
 }
 
+export const getAllOrders = async () => {
+    const pew = (await axios.get(`${BASE_URL}`, {
+        headers: {
+
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+    })).data.data.orders
+    console.log("Get Orders:", pew);
+    return pew;
+}
+
 // {
 //     "user": "68ffaaf8adbdc29938c6f1f9",
 //         "items": [
