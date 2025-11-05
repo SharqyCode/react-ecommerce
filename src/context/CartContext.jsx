@@ -38,16 +38,30 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(products));
   }, [products]);
 
-  const addProduct = (product) => {
-    if (!products.includes(product)) {
-      setProducts((prev) => [...prev, product]);
+  const addProduct = (newProduct) => {
+    const prodInCart = products.find(
+      (product) => product._id === newProduct._id
+    );
+    if (!prodInCart) {
+      setProducts((prev) => [...prev, newProduct]);
       showSnackbar("Added to Cart", "success");
     } else {
-      showSnackbar("Already in cart", "error");
+      const newProducts = products.map((product) =>
+        product._id === newProduct._id
+          ? { ...product, quantity: +product.quantity + +newProduct.quantity }
+          : product
+      );
+      setProducts(newProducts);
+      showSnackbar(
+        `Added ${newProduct.quantity} of ${newProduct.name} to Cart
+       to Cart
+      `,
+        "info"
+      );
     }
   };
   const removeProduct = (id) => {
-    setProducts((prev) => prev.filter((item) => item.id !== id));
+    setProducts((prev) => prev.filter((item) => item._id !== id));
   };
 
   const increaseQuantity = (id) => {

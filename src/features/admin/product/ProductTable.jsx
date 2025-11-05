@@ -82,10 +82,19 @@ export default function ProductTable() {
 
   // console.log("modal: ", formData);
 
-  const handleUpdate = (e, product) => {
-    e.preventDefault();
+  // const handleUpdate = (e, product) => {
+  //   e.preventDefault();
 
-    const { _id, ...prodData } = product;
+  //   const { _id, ...prodData } = product;
+  //   console.log("handleUpdate: ", _id, prodData);
+  //   updateMutation.mutate({
+  //     productId: _id,
+  //     product: { ...prodData },
+  //   });
+  //   setOpen(false);
+  // };
+  const handleUpdate = () => {
+    const { _id, ...prodData } = formData;
     console.log("handleUpdate: ", _id, prodData);
     updateMutation.mutate({
       productId: _id,
@@ -143,17 +152,17 @@ export default function ProductTable() {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          className="flex justify-center items-center text-black"
+          className="flex justify-center items-center "
         >
           <div className=" p-4  w-fit rounded">
             <form
-              onSubmit={(e) => {
-                handleUpdate(e, formData);
-              }}
-              className="p-4  rounded shadow space-y-4 max-h-80 overflow-scroll"
+              // onSubmit={(e) => {
+              //   handleUpdate(e, formData);
+              // }}
+              className="p-4  rounded-t shadow space-y-4 max-h-80 overflow-scroll bg-white dark:bg-gray-800"
             >
-              <h2 className="text-xl font-medium">Update Product</h2>
               <div className="flex flex-wrap gap-4 flex-col items-start ">
+                <h2 className="text-xl font-medium">Update Product</h2>
                 {Object.keys(formData).map((field) => {
                   if (field === "_id") return;
                   if (
@@ -242,13 +251,16 @@ export default function ProductTable() {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <button
-                type="submit"
-                disabled={updateMutation.isLoading}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                {updateMutation.isLoading ? "Updating..." : "Update Product"}
-              </button>
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-b">
+                <button
+                  onClick={handleUpdate}
+                  type="submit"
+                  disabled={updateMutation.isLoading}
+                  className="bg-primary text-black px-4 py-2 rounded hover:bg-secondary"
+                >
+                  {updateMutation.isLoading ? "Updating..." : "Update Product"}
+                </button>
+              </div>
             </form>
           </div>
         </Modal>

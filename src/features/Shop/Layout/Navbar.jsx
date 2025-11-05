@@ -167,7 +167,7 @@ export default function Navbar({ onSearch }) {
                           className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-700 pb-2"
                         >
                           <img
-                            src={item.image || "https://placehold.co/60x60"}
+                            src={item.thumbnail || "https://placehold.co/60x60"}
                             alt={item.name}
                             className="w-12 h-12 object-cover rounded-md"
                           />

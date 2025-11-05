@@ -8,7 +8,7 @@ export default function ProductCard({ product, isHomePage }) {
   return (
     <Link
       to={`/products/${product.slug || product._id}`}
-      className={`relative block rounded-xl overflow-hidden bg-white dark:bg-[rgb(30,30,30)]
+      className={`group relative block rounded-xl overflow-hidden bg-white dark:bg-[rgb(30,30,30)]
               border border-gray-200 dark:border-gray-700  hover:ring-2 hover:ring-primary
                transition-all duration-300 ${
                  isHomePage ? "snap-center shrink-0 w-60" : "w-full"
@@ -17,7 +17,7 @@ export default function ProductCard({ product, isHomePage }) {
       <img
         src={product.thumbnail || "https://placehold.co/300x300?text=No+Image"}
         alt={product.name}
-        className="aspect-square w-full object-cover hover:scale-105 transition-transform duration-500"
+        className="aspect-square w-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
       <div className="absolute inset-0 bg-black/0 hover:bg-black/5 transition-colors duration-300" />
 

@@ -16,6 +16,7 @@ import { getProductBySlug } from "../../../api/productsApi";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useCart } from "../../../context/CartContext";
 import ReviewSection from "./Reviews/ReviewSection";
+import { grey } from "@mui/material/colors";
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -128,6 +129,9 @@ const ProductDetail = () => {
           >
             {product.name}
           </Typography>
+          <Typography variant="subtitle2" color={grey[500]} sx={{ mt: 1 }}>
+            SKU: {product.sku}
+          </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
             {product.discountPrice && (
@@ -156,7 +160,7 @@ const ProductDetail = () => {
           </Typography>
 
           {/* ===== SIZE BUTTONS ===== */}
-          {product.sizes?.length > 0 && (
+          {product.sizes?.length > 0 && product.sizes[0] !== "" && (
             <Box sx={{ display: "flex", gap: 1.5, mt: 3 }}>
               {product.sizes.map((size) => (
                 <Button

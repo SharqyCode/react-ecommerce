@@ -5,7 +5,7 @@ export default function AdminProductTable({ data, handleDelete, handleOpen }) {
     <div className="max-h-80 overflow-y-scroll">
       <table className="min-w-full  text-left border-collapse">
         <thead>
-          <tr className="border-b sticky top-0 w-full z-10">
+          <tr className="border-b sticky top-0 w-full z-10 bg-white dark:bg-gray-800">
             <th className="p-3 font-semibold">#</th>
             <th className="p-3 font-semibold">Name</th>
             <th className="p-3 font-semibold">Price</th>

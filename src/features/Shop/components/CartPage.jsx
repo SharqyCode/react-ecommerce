@@ -26,6 +26,8 @@ const CartPage = () => {
     useCart();
   const { user } = useAuth();
 
+  console.log("Cart:", products);
+
   const { mode } = useThemeContext();
   const theme = useTheme();
   const isLight = mode === "light";
@@ -140,7 +142,7 @@ const CartPage = () => {
                 >
                   <TableCell>
                     <Avatar
-                      src={item.img || "/placeholder.png"}
+                      src={item.thumbnail || "/placeholder.png"}
                       alt={item.name}
                       variant="rounded"
                       sx={{ width: 60, height: 60 }}
@@ -175,7 +177,7 @@ const CartPage = () => {
                   <TableCell align="center">
                     <IconButton
                       color="error"
-                      onClick={() => removeProduct(item.id)}
+                      onClick={() => removeProduct(item._id)}
                     >
                       <DeleteIcon />
                     </IconButton>
