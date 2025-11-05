@@ -175,7 +175,7 @@ const CartPage = () => {
                   <TableCell align="center">
                     <IconButton
                       color="error"
-                      onClick={() => removeProduct(item.id)}
+                      onClick={() => removeProduct(item._id)}
                     >
                       <DeleteIcon />
                     </IconButton>
