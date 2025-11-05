@@ -38,12 +38,12 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(products));
   }, [products]);
 
-  const addProduct = (product) => {
-    if (!products.includes(product)) {
-      setProducts((prev) => [...prev, product]);
+  const addProduct = (newProduct) => {
+    if (!products.find((product) => product._id === newProduct._id)) {
+      setProducts((prev) => [...prev, newProduct]);
       showSnackbar("Added to Cart", "success");
     } else {
-      showSnackbar("Already in cart", "error");
+      showSnackbar(`Already in cart: ${newProduct.name}`, "error");
     }
   };
   const removeProduct = (id) => {
