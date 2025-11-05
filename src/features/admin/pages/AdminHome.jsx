@@ -17,6 +17,11 @@ const AdminHome = () => {
     queryKey: ["products"],
     queryFn: getAllProducts,
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
+    retryDelay: 1000 * 3, // 3 seconds
   });
 
   const {
@@ -28,6 +33,11 @@ const AdminHome = () => {
     queryKey: ["users"],
     staleTime: 1000 * 60 * 30,
     queryFn: getAllUsers,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
+    retryDelay: 1000 * 3, // 3 seconds
   });
 
   const {
@@ -39,6 +49,11 @@ const AdminHome = () => {
     queryKey: ["orders"],
     staleTime: 1000 * 60 * 30,
     queryFn: getAllOrders,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
+    retryDelay: 1000 * 3, // 3 seconds
   });
 
   const users = usersData || [];

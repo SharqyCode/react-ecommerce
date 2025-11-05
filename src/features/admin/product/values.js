@@ -18,3 +18,8 @@ export const empty_form = {
     isFeatured: false,
     isActive: true,
 };
+
+
+export const requiredFields = [
+    "name", "description", "price"
+]
