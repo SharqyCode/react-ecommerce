@@ -156,7 +156,7 @@ const ProductDetail = () => {
           </Typography>
 
           {/* ===== SIZE BUTTONS ===== */}
-          {product.sizes?.length > 0 && (
+          {product.sizes?.length > 0 && product.sizes[0] !== "" && (
             <Box sx={{ display: "flex", gap: 1.5, mt: 3 }}>
               {product.sizes.map((size) => (
                 <Button

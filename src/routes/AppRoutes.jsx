@@ -22,6 +22,10 @@ export default function AppRoutes() {
       document.documentElement.classList.remove("dark");
     }
   }, [mode]);
+  if (import.meta.env.VITE_CLOUDINARY_URL) {
+    // code inside here will be tree-shaken in production builds
+    console.log("Dev mode");
+  }
   return (
     <Router>
       <Routes>
