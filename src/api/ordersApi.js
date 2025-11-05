@@ -8,7 +8,7 @@ export const addOrder = async (order) => {
             "Authorization": `Bearer ${localStorage.getItem('token')}`
         }
     })).data
-    console.log(pew);
+    console.log("order mrten f3ln",pew);
     return pew;
 }
 

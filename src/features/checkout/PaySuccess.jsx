@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useRef } from "react";
 import { Box, Typography, Button, Paper } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useNavigate } from "react-router-dom";
@@ -10,29 +10,30 @@ export default function PaySuccess() {
   const navigate = useNavigate();
   const { products, resetCart } = useCart();
   const { user } = useAuth();
+  const hasCreatedOrder = useRef(false);
+  const productsSnapshot = useRef(products);
 
   useEffect(() => {
-    if (!user || products.length === 0) return;
+    // ✅ Run only when user & products are ready
+    if (!user || products.length === 0 || hasCreatedOrder.current) return;
+
     (async () => {
       try {
+        hasCreatedOrder.current = true; // prevent double fire
+        console.log("🟢 Creating order for user:", user._id);
+
         const cartItems = products.map((product) => ({
           product: product._id,
           quantity: product.quantity,
         }));
 
-        const order = {
-          user: user._id,
-          items: [...cartItems],
-        };
-
-        await addOrder(order);
+        await addOrder({ user: user._id, items: cartItems });
         resetCart();
       } catch (error) {
         console.error("Order creation failed:", error);
       }
     })();
-    resetCart();
-  }, [user]);
+  }, [user, products]);
 
   // {
   //     "user": "68ffaaf8adbdc29938c6f1f9",
