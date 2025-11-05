@@ -3,14 +3,48 @@ import { Box, Typography, Button, Paper } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { addOrder } from "../../api/ordersApi";
+import { useAuth } from "../../context/AuthContext";
 
 export default function PaySuccess() {
   const navigate = useNavigate();
-  const { resetCart } = useCart();
-  useEffect(() => {
-    resetCart();
-  }, []);
+  const { products, resetCart } = useCart();
+  const { user } = useAuth();
 
+  useEffect(() => {
+    if (!user || products.length === 0) return;
+    (async () => {
+      try {
+        const cartItems = products.map((product) => ({
+          product: product._id,
+          quantity: product.quantity,
+        }));
+
+        const order = {
+          user: user._id,
+          items: [...cartItems],
+        };
+
+        await addOrder(order);
+        resetCart();
+      } catch (error) {
+        console.error("Order creation failed:", error);
+      }
+    })();
+    resetCart();
+  }, [user]);
+
+  // {
+  //     "user": "68ffaaf8adbdc29938c6f1f9",
+  //         "items": [
+  //             {
+  //                 "product": "690315dbc6fa90e75278c5ee",
+  //                 "quantity": 5
+  //             }
+  //         ]
+  // }
+
+  if (!user) return <Typography>Loading...</Typography>;
   return (
     <Box
       display="flex"

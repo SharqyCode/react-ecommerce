@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  
   const [user, setUser] = useState(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -42,25 +41,27 @@ export const AuthProvider = ({ children }) => {
   // Optional: verify token on app load
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      getUserById(jwtDecode(token).id)
-        .then((data) => {
+
+    const getUser = async () => {
+      if (token) {
+        try {
+          const data = await getUserById(await jwtDecode(token).id);
           setUser(data);
           console.log(`context setUser`, data);
-        })
-        .catch((error) => {
+        } catch (error) {
           // Handle token invalid or API error if needed
           console.error("Token validation error:", error);
           localStorage.removeItem("token");
-        })
-        .finally(() => {
+        } finally {
           // Set loading to false once the check is complete (success or failure)
           setLoading(false);
-        });
-    } else {
-      // If no token, also stop loading immediately
-      setLoading(false);
-    }
+        }
+      } else {
+        // If no token, also stop loading immediately
+        setLoading(false);
+      }
+    };
+    getUser();
   }, []);
 
   return (

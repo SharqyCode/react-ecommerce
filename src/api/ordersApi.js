@@ -1,0 +1,23 @@
+import axios from "axios"
+
+const BASE_URL = "http://localhost:5000/api/orders"
+
+export const addOrder = async (order) => {
+    const pew = (await axios.post(`${BASE_URL}`, order, {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+    })).data
+    console.log(pew);
+    return pew;
+}
+
+// {
+//     "user": "68ffaaf8adbdc29938c6f1f9",
+//         "items": [
+//             {
+//                 "product": "690315dbc6fa90e75278c5ee",
+//                 "quantity": 5
+//             }
+//         ]
+// }
