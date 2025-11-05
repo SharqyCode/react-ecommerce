@@ -39,11 +39,25 @@ export const CartProvider = ({ children }) => {
   }, [products]);
 
   const addProduct = (newProduct) => {
-    if (!products.find((product) => product._id === newProduct._id)) {
+    const prodInCart = products.find(
+      (product) => product._id === newProduct._id
+    );
+    if (!prodInCart) {
       setProducts((prev) => [...prev, newProduct]);
       showSnackbar("Added to Cart", "success");
     } else {
-      showSnackbar(`Already in cart: ${newProduct.name}`, "error");
+      const newProducts = products.map((product) =>
+        product._id === newProduct._id
+          ? { ...product, quantity: +product.quantity + +newProduct.quantity }
+          : product
+      );
+      setProducts(newProducts);
+      showSnackbar(
+        `Added ${newProduct.quantity} of ${newProduct.name} to Cart
+       to Cart
+      `,
+        "info"
+      );
     }
   };
   const removeProduct = (id) => {

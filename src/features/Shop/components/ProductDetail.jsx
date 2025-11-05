@@ -16,6 +16,7 @@ import { getProductBySlug } from "../../../api/productsApi";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useCart } from "../../../context/CartContext";
 import ReviewSection from "./Reviews/ReviewSection";
+import { grey } from "@mui/material/colors";
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -127,6 +128,9 @@ const ProductDetail = () => {
             sx={{ color: textPrimary }}
           >
             {product.name}
+          </Typography>
+          <Typography variant="subtitle2" color={grey[500]} sx={{ mt: 1 }}>
+            SKU: {product.sku}
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
