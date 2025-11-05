@@ -8,11 +8,11 @@ export default function ProductCard({ product, isHomePage }) {
   return (
     <Link
       to={`/products/${product.slug || product._id}`}
-      className={`relative block rounded-xl overflow-hidden bg-white dark:bg-[#1e1e1e]
-              border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg
-              hover:-translate-y-1 transition-all duration-300 ${
-                isHomePage ? "snap-center shrink-0 w-60" : "w-full"
-              }`}
+      className={`relative block rounded-xl overflow-hidden bg-white dark:bg-[rgb(30,30,30)]
+              border border-gray-200 dark:border-gray-700  hover:ring-2 hover:ring-primary
+               transition-all duration-300 ${
+                 isHomePage ? "snap-center shrink-0 w-60" : "w-full"
+               }`}
     >
       <img
         src={product.thumbnail || "https://placehold.co/300x300?text=No+Image"}

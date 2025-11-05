@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FiMenu, FiUsers, FiBox, FiShoppingBag } from "react-icons/fi";
+import { FiMenu, FiUsers, FiBox, FiShoppingBag, FiHome } from "react-icons/fi";
 import { Button } from "@mui/material";
 import { useAuth } from "../../../context/AuthContext";
 import ThemeToggleButton from "../../../components/theme/ThemeToggleButton";
@@ -19,11 +19,11 @@ export default function AdminSidebar() {
           className="bg-black opacity-20 absolute w-full h-full z-20"
         ></div>
       )}
-      <div id="placeholder" className="w-16 bg-white"></div>
+      <div id="placeholder" className="w-16 "></div>
       <aside
         className={`${
           isOpen ? "w-64" : "w-16"
-        } absolute h-full bg-white border-r border-gray-200 transition-all duration-300 p-4 z-20`}
+        } absolute h-full top-0 bottom-0 bg-white dark:bg-[#303030] text-gray-800 dark:text-gray-100 shadow-r transition-all duration-300 p-4 z-20`}
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -36,6 +36,15 @@ export default function AdminSidebar() {
         </button>
 
         <nav className="flex flex-col gap-4">
+          <Link
+            to="/admin"
+            className={`${
+              !isOpen ? "justify-center" : "justify-start"
+            } flex items-center gap-3 hover:text-blue-600`}
+          >
+            <FiHome />
+            {isOpen && <span>Home</span>}
+          </Link>
           <Link
             to="users"
             className={`${
@@ -68,11 +77,7 @@ export default function AdminSidebar() {
         </nav>
         {isOpen && (
           <div>
-            <Button
-              variant="text"
-              sx={{ position: "absolute", bottom: "10px", color: "#333" }}
-              onClick={logout}
-            >
+            <Button variant="text" sx={{ marginTop: "40px" }} onClick={logout}>
               Logout
             </Button>
           </div>
