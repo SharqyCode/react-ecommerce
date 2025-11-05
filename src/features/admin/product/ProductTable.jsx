@@ -18,7 +18,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { empty_form } from "./values";
+import { empty_form, requiredFields } from "./values";
 import { getAllCategories } from "../../../api/categoriesApi";
 import DynamicTextFields from "../components/DynamicTextFields";
 import AdminProductTable from "./AdminProductTable";
@@ -49,11 +49,18 @@ export default function ProductTable() {
   console.log(formData);
   const handleClose = () => setOpen(false);
 
-  const { data: categories } = useQuery({
+  const { data: categoriesData } = useQuery({
     queryKey: ["categories"],
     staleTime: Infinity,
     queryFn: getAllCategories,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
+    retryDelay: 1000 * 3, // 3 seconds
   });
+
+  const categories = categoriesData || [];
 
   const deleteMutation = useMutation({
     mutationFn: deleteProductById,
@@ -88,9 +95,6 @@ export default function ProductTable() {
   };
 
   const handleChange = (text, field, collection, index = null) => {
-    console.log(collection);
-    console.log(index);
-    console.log(collection[index - 1]);
     setFormData((prev) => {
       collection[index] = text;
       return { ...prev, [field]: collection };
@@ -128,7 +132,7 @@ export default function ProductTable() {
 
   if (isSuccess)
     return (
-      <div className="overflow-x-auto bg-white rounded shadow text-black">
+      <div className="overflow-x-auto  rounded shadow">
         <AdminProductTable
           handleDelete={handleDelete}
           handleOpen={handleOpen}
@@ -141,12 +145,12 @@ export default function ProductTable() {
           aria-describedby="modal-modal-description"
           className="flex justify-center items-center text-black"
         >
-          <div className="bg-white p-4  w-fit rounded">
+          <div className=" p-4  w-fit rounded">
             <form
               onSubmit={(e) => {
                 handleUpdate(e, formData);
               }}
-              className="p-4 bg-white rounded shadow space-y-4 max-h-80 overflow-scroll"
+              className="p-4  rounded shadow space-y-4 max-h-80 overflow-scroll"
             >
               <h2 className="text-xl font-medium">Update Product</h2>
               <div className="flex flex-wrap gap-4 flex-col items-start ">
@@ -157,18 +161,23 @@ export default function ProductTable() {
                     !["category", "subCategory"].includes(field)
                   )
                     return (
-                      <TextField
-                        key={field}
-                        value={formData[field]}
-                        onChange={(e) => {
-                          setFormData({
-                            ...formData,
-                            [field]: e.target.value,
-                          });
-                        }}
-                        variant="outlined"
-                        label={field}
-                      />
+                      <div>
+                        <TextField
+                          key={field}
+                          value={formData[field]}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              [field]: e.target.value,
+                            });
+                          }}
+                          variant="outlined"
+                          label={field}
+                        />
+                        {requiredFields.includes(field) && (
+                          <span className="text-red-500 text-xl ml-2">*</span>
+                        )}
+                      </div>
                     );
                   if (["category", "subCategory"].includes(field))
                     return (

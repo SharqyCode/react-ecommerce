@@ -19,11 +19,11 @@ export default function AdminSidebar() {
           className="bg-black opacity-20 absolute w-full h-full z-20"
         ></div>
       )}
-      <div id="placeholder" className="w-16 "></div>
+      <div id="placeholder" className="w-16"></div>
       <aside
         className={`${
           isOpen ? "w-64" : "w-16"
-        } absolute h-full top-0 bottom-0 bg-white dark:bg-[#303030] text-gray-800 dark:text-gray-100 shadow-r transition-all duration-300 p-4 z-20`}
+        } absolute h-full top-0 left-0  bg-white dark:bg-[#303030] text-gray-800 dark:text-gray-100 shadow-r transition-all duration-300 p-4 z-20`}
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -40,7 +40,7 @@ export default function AdminSidebar() {
             to="/admin"
             className={`${
               !isOpen ? "justify-center" : "justify-start"
-            } flex items-center gap-3 hover:text-blue-600`}
+            } flex items-center gap-3 hover:text-secondary dark:hover:text-primary`}
           >
             <FiHome />
             {isOpen && <span>Home</span>}
@@ -49,7 +49,7 @@ export default function AdminSidebar() {
             to="users"
             className={`${
               !isOpen ? "justify-center" : "justify-start"
-            } flex items-center gap-3 hover:text-blue-600`}
+            } flex items-center gap-3 hover:text-secondary dark:hover:text-primary`}
           >
             <FiUsers />
             {isOpen && <span>Users</span>}
@@ -59,7 +59,7 @@ export default function AdminSidebar() {
             to="products"
             className={`${
               !isOpen ? "justify-center" : "justify-start"
-            } flex items-center gap-3 hover:text-blue-600`}
+            } flex items-center gap-3 hover:text-secondary dark:hover:text-primary`}
           >
             <FiBox />
             {isOpen && <span>Products</span>}
@@ -69,7 +69,7 @@ export default function AdminSidebar() {
             to="orders"
             className={`${
               !isOpen ? "justify-center" : "justify-start"
-            } flex items-center gap-3 hover:text-blue-600`}
+            } flex items-center gap-3 hover:text-secondary dark:hover:text-primary`}
           >
             <FiShoppingBag />
             {isOpen && <span>Orders</span>}

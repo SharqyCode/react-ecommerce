@@ -33,6 +33,7 @@ const DynamicTextFields = ({ field, value = [""], handleChange }) => {
         spacing={2}
         justifyContent="center"
         alignItems={"start"}
+        flexWrap={"wrap"}
       >
         <Button variant="contained" color="primary" onClick={handleAddField}>
           Add

@@ -7,8 +7,13 @@ export default function UserTable() {
   const queryClient = useQueryClient();
   const { data, isError, isSuccess, isLoading } = useQuery({
     queryKey: ["users"],
-    staleTime: 1000 * 60 * 30,
     queryFn: getAllUsers,
+    staleTime: 1000 * 60 * 30,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
+    retryDelay: 1000 * 3, // 3 seconds
   });
 
   const deleteMutation = useMutation({
@@ -57,7 +62,7 @@ export default function UserTable() {
       <>
         <table className="min-w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-50 border-b">
+            <tr className=" border-b">
               <th className="p-3 font-semibold">#</th>
               <th className="p-3 font-semibold">Name</th>
               <th className="p-3 font-semibold">email</th>
@@ -66,7 +71,7 @@ export default function UserTable() {
           </thead>
           <tbody>
             {data.map((user, index) => (
-              <tr key={user._id} className=" odd:bg-gray-200 hover:bg-blue-200">
+              <tr key={user._id} className=" ">
                 <td className="p-3">{++index}</td>
                 <td className="p-3">{user.name}</td>
                 <td className="p-3">{user.email}</td>
