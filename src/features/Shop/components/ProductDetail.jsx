@@ -117,6 +117,9 @@ const ProductDetail = () => {
           }}
         >
           <CardMedia
+            onClick={() => {
+              setActiveImg(product.thumbnail);
+            }}
             component="img"
             src={product.thumbnail}
             sx={{
